@@ -40,7 +40,7 @@
         <!-- Секция для администратора -->
         <div v-if="user.role === 'admin'" class="admin-section">
           <h2 class="section-title">
-            Заявки на рассмотрении →
+            Заявки на рассмотрении 
           </h2>
           
           <div v-if="pendingRecipes && pendingRecipes.length > 0" class="recipes-grid">
@@ -159,7 +159,7 @@ const rejectRecipe = (recipeId) => {
 .main-content {
     margin-left: 250px;
     min-height: 100vh;
-    background-color: #fff;
+    background-color: #4a5568;
 }
 
 .profile-header {
@@ -405,7 +405,7 @@ const rejectRecipe = (recipeId) => {
     font-size: 24px;
     font-weight: 600;
     margin-bottom: 20px;
-    color: #1a202c;
+    color: white;
 }
 
 .no-pending-recipes {

@@ -6,7 +6,7 @@
                 <h1 class="text-2xl font-bold mb-6">Редактировать категорию</h1>
                 <form @submit.prevent="submit" class="bg-white rounded-lg shadow p-6">
                     <div class="mb-4">
-                        <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Название категории</label>
+                        <label for="name" class="block text-sm font-medium text-white-700 mb-1">Название категории</label>
                         <input
                             type="text"
                             id="name"

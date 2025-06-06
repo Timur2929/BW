@@ -135,7 +135,7 @@ const submit = () => {
 .page-container {
     display: flex;
     min-height: 100vh;
-    background-color: #f8fafc;
+    background-color: #4a5568;
 }
 
 .main-content {
@@ -145,7 +145,7 @@ const submit = () => {
     justify-content: center;
     align-items: center;
     padding: 2rem;
-    background-color: #f8fafc;
+    background-color: #4a5568;
 }
 
 .register-container {
@@ -200,7 +200,7 @@ const submit = () => {
 
 .form-input:focus {
     outline: none;
-    border-color: #6366f1;
+    border-color: #4a5568;
     box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
     background-color: white;
 }
@@ -243,7 +243,7 @@ const submit = () => {
     font-size: 1rem;
     font-weight: 600;
     color: white;
-    background-color: #6366f1;
+    background-color: #4a5568;
     border: none;
     border-radius: 8px;
     cursor: pointer;
@@ -274,7 +274,7 @@ const submit = () => {
 }
 
 .login-link a {
-    color: #6366f1;
+    color: #4a5568;
     font-weight: 600;
     text-decoration: none;
     transition: color 0.2s;

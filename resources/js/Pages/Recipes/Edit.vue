@@ -10,7 +10,7 @@
                     <div v-if="recipe.status === 'revision' && recipe.revision_comment" 
                         class="mb-6 p-4 bg-yellow-50 border-l-4 border-yellow-400 rounded-lg">
                         <div class="flex items-start">
-                            <span class="mr-3 text-yellow-500 text-2xl">⚠️</span>
+                            <span class="mr-3 text-yellow-500 text-2xl"></span>
                             <div>
                                 <h3 class="font-semibold text-yellow-700">Требуется доработка</h3>
                                 <p class="text-yellow-800 mt-1">{{ recipe.revision_comment }}</p>

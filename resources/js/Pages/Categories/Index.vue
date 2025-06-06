@@ -64,7 +64,7 @@ defineProps({
     font-size: 1.5rem;
     font-weight: 600;
     margin-bottom: 2rem;
-    color: #2d3748;
+    color: white;
 }
 
 .categories-grid {
@@ -90,11 +90,12 @@ defineProps({
     text-decoration: none;
     color: inherit;
     transition: all 0.2s ease;
-    border: 1px solid #e2e8f0;
+   
     border-radius: 0.5rem;
     padding: 1rem;
-    background-color: white;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    color: white;
+    background-color: #2d3748;
+    
 }
 
 .category-card:hover {
@@ -130,11 +131,11 @@ defineProps({
     font-size: 1.25rem;
     font-weight: 600;
     margin-bottom: 0.5rem;
-    color: #2d3748;
+    color: white;
 }
 
 .category-count {
-    color: #718096;
+    color: white;
     font-size: 0.875rem;
     display: flex;
     align-items: center;
@@ -142,7 +143,7 @@ defineProps({
 }
 
 .category-count::before {
-    content: "📖";
+    content: "";
     font-size: 1rem;
 }
 </style> 

@@ -13,7 +13,7 @@
                     </div>
 
                     <form @submit.prevent="submit" class="space-y-8">
-                        <!-- Основная информация -->
+                        <!-- Основная информация --> 
                         <div class="space-y-6 bg-gray-700 p-6 rounded-lg border border-gray-600">
                             <h3 class="text-xl font-semibold text-blue-400 flex items-center">
                                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -417,7 +417,8 @@ const submit = () => {
             form.step_images = {};
             isSubmitting.value = false;
         },
-        onError: () => {
+        onError: (error) => {
+            alert('Ошибка номер:', error)
             isSubmitting.value = false;
             // Прокручиваем к первой ошибке
             const firstError = document.querySelector('.text-red-400');

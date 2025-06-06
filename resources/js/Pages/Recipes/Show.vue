@@ -296,14 +296,14 @@ const sendToRevision = () => {
 
                             <!-- Комментарий администратора для статусов 'revision' и 'rejected' -->
                             <div v-if="recipe.status === 'revision' && recipe.revision_comment" class="mb-6 p-4 rounded-lg bg-yellow-50 border-l-4 border-yellow-400 flex items-start">
-                                <span class="mr-3 text-yellow-500 text-2xl">⚠️</span>
+                                <span class="mr-3 text-yellow-500 text-2xl"></span>
                                 <div>
                                     <div class="font-semibold text-yellow-700 mb-1">Требуется доработка:</div>
                                     <div class="text-yellow-800">{{ recipe.revision_comment }}</div>
                                 </div>
                             </div>
                             <div v-else-if="recipe.status === 'rejected' && recipe.rejection_reason" class="mb-6 p-4 rounded-lg bg-red-50 border-l-4 border-red-400 flex items-start">
-                                <span class="mr-3 text-red-500 text-2xl">⛔</span>
+                                <span class="mr-3 text-red-500 text-2xl"></span>
                                 <div>
                                     <div class="font-semibold text-red-700 mb-1">Причина отклонения:</div>
                                     <div class="text-red-800">{{ recipe.rejection_reason }}</div>
@@ -754,7 +754,7 @@ const sendToRevision = () => {
 .recipe-category {
     display: inline-block;
     padding: 6px 12px;
-    background: #e2e8f0;
+    background: #4a5568;
     border-radius: 6px;
     color: #4a5568;
     font-size: 0.9rem;

@@ -100,22 +100,26 @@ class RecipeController extends Controller
     {
         \Log::info('Начало обработки запроса на создание рецепта');
         
+        
+
         try {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'required|string',
-            'category_id' => 'required|exists:categories,id',
-            'cooking_time' => 'required|string',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'ingredients' => 'required|array|min:1',
-            'ingredients.*.name' => 'required|string|max:255',
-            'ingredients.*.amount' => 'required|string|max:50',
-            'ingredients.*.unit' => 'required|string|max:50',
-            'steps' => 'required|array|min:1',
-            'steps.*.description' => 'required|string',
-            'steps.*.order' => 'required|integer|min:1',
-            'step_images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
-        ]);
+        // $validated = $request->validate([
+        //     'name' => 'required|string|max:255',
+        //     'description' => 'required|string',
+        //     'category_id' => 'required|exists:categories,id',
+        //     'cooking_time' => 'required|string',
+        //     'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        //     'ingredients' => 'required|array|min:1',
+        //     'ingredients.*.name' => 'required|string|max:255',
+        //     'ingredients.*.amount' => 'required|string|max:50',
+        //     'ingredients.*.unit' => 'required|string|max:50',
+        //     'steps' => 'required|array|min:1',
+        //     'steps.*.description' => 'required|string',
+        //     'steps.*.order' => 'required|integer|min:1',
+        //     'step_images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+        // ]);
+
+        $validated = $request->all();
 
             \Log::info('Валидация пройдена успешно', ['validated' => $validated]);
 
