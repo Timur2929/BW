@@ -68,7 +68,7 @@ function handleImageError() {
                         <div class="category-overlay">
                             <div class="category-content">
                                 <h3 class="category-name">{{ category.name }}</h3>
-                                <span class="category-arrow">→</span>
+                                
                             </div>
                         </div>
                     </div>
@@ -114,10 +114,10 @@ function handleImageError() {
                         </div>
                         <div class="recipe-author">
                             <img 
-                                :src="recipe.user.profile_photo_url || '/storage/images/logo.png'"
+                                :src="recipe.user.profile_photo_url || '/storage/images/profile/default-avatar.png'"
                                 :alt="recipe.user.first_name + ' ' + recipe.user.last_name"
                                 class="author-avatar"
-                                @error="$event.target.src = '/storage/images/logo.png'"
+                                @error="$event.target.src = '/storage/images/profile/default-avatar.png'"
                             />
                             <div class="author-info">
                                 <span class="author-name">{{ recipe.user.first_name }} {{ recipe.user.last_name }}</span>

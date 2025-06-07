@@ -208,7 +208,7 @@ const submit = () => {
 .form-input:focus + label,
 .form-input:not(:placeholder-shown) + label {
     transform: translateY(-1.25rem) scale(0.85);
-    color: #6366f1;
+    color: green;
     background-color: white;
     padding: 0 0.25rem;
     left: 1.75rem;
@@ -252,7 +252,7 @@ const submit = () => {
 }
 
 .register-button:hover {
-    background-color: #4f46e5;
+    background-color: green;
 }
 
 .register-button:disabled {
@@ -281,7 +281,7 @@ const submit = () => {
 }
 
 .login-link a:hover {
-    color: #4f46e5;
+    color: green;
     text-decoration: underline;
 }
 

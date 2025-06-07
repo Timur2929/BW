@@ -207,7 +207,7 @@ const submit = () => {
 }
 
 .auth-button:hover:not(:disabled) {
-  background-color: #4f46e5;
+  background-color: green;
 }
 
 .auth-button:disabled {
@@ -238,7 +238,7 @@ const submit = () => {
 }
 
 .auth-link:hover {
-  color: #4f46e5;
+  color: green;
   text-decoration: underline;
 }
 

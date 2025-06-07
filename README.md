@@ -1,16 +1,3 @@
-## Технологии
-
-- **Backend**: Laravel 10
-- **Frontend**: Vue.js 3, Inertia.js
-- **База данных**: MySQL
-
-## Требования
-
-- PHP >= 8.1
-- Node.js >= 16
-- Composer
-- MySQL >= 8.0
-
 ## Установка
 
 1. Установите PHP зависимости:

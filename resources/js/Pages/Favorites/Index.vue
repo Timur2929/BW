@@ -295,13 +295,13 @@ const truncateDescription = (text) => {
 
 .empty-state h2 {
     font-size: 22px;
-    color: #2d3748;
+    color: white;
     margin-bottom: 15px;
     font-weight: 600;
 }
 
 .empty-state p {
-    color: #718096;
+    color: white;
     margin-bottom: 30px;
     line-height: 1.5;
 }

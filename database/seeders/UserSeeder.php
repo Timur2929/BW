@@ -21,8 +21,8 @@ class UserSeeder extends Seeder
 
         // Создаем обычного пользователя
         User::create([
-            'first_name' => 'Иван',
-            'last_name' => 'Петров',
+            'first_name' => 'Матвей',
+            'last_name' => 'Иванов',
             'email' => 'user@example.com',
             'password' => bcrypt('password'),
             'role' => 'user',

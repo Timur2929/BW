@@ -231,7 +231,7 @@ const sendToRevision = () => {
     <AppLayout>
         <div class="py-12 px-4 sm:px-6 lg:px-8">
             <div class="max-w-7xl mx-auto">
-                <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+                <div class="bg-#374151 rounded-lg shadow-sm overflow-hidden">
                     <div class="recipe-header p-6">
                         <div class="recipe-image-container mb-6">
                             <img 
@@ -244,7 +244,7 @@ const sendToRevision = () => {
 
                         <div class="recipe-info">
                             <div class="flex justify-between items-start mb-6">
-                                <h1 class="text-3xl font-bold text-gray-900">{{ recipe.name }}</h1>
+                                <h1 class="text-3xl font-bold text-white-900">{{ recipe.name }}</h1>
                                 <div v-if="recipe.status === 'approved'" class="flex space-x-4">
                                     <button 
                                         v-if="page.props.auth.user"
@@ -252,7 +252,7 @@ const sendToRevision = () => {
                                         class="inline-flex items-center px-4 py-2 border rounded-md font-semibold text-xs uppercase tracking-widest transition"
                                         :class="[
                                             isFavorited 
-                                                ? 'bg-blue-600 text-white border-transparent hover:bg-blue-700'
+                                                ? 'bg-green-600 text-white border-transparent hover:bg-green-700'
                                                 : 'border-gray-300 text-gray-700 bg-white hover:bg-gray-50'
                                         ]"
                                     >
@@ -265,17 +265,17 @@ const sendToRevision = () => {
                             <div class="flex items-center space-x-6 mb-6">
                                 <div class="flex items-center">
                                     <span class="text-gray-400 mr-2">⏱</span>
-                                    <span class="text-gray-600">{{ recipe.cooking_time }}</span>
+                                    <span class="text-white-600">{{ recipe.cooking_time }}</span>
                                 </div>
                                 <div class="flex items-center">
                                     <div class="flex text-yellow-400 mr-2">
                                         <span v-for="n in 5" :key="n" :class="{ 'text-gray-300': n > (recipe.rating || 0) }">★</span>
                                     </div>
-                                    <span class="text-gray-600">({{ recipe.rating || '0.0' }})</span>
+                                    <span class="text-white-600">({{ recipe.rating || '0.0' }})</span>
                                 </div>
                                 <div class="flex items-center">
                                     <span class="text-gray-400 mr-2">👁</span>
-                                    <span class="text-gray-600">{{ recipe.views }} просмотров</span>
+                                    <span class="text-white-600">{{ recipe.views }} просмотров</span>
                                 </div>
                             </div>
 
@@ -287,12 +287,12 @@ const sendToRevision = () => {
                                     @error="handleImageError"
                                 />
                                 <div>
-                                    <div class="text-sm font-medium text-gray-900">{{ recipe.user.full_name }}</div>
-                                    <div class="text-sm text-gray-500">Автор рецепта</div>
+                                    <div class="text-sm font-medium text-white-900">{{ recipe.user.full_name }}</div>
+                                    <div class="text-sm text-white-500">Автор рецепта</div>
                                 </div>
                             </div>
 
-                            <p class="text-gray-600 mb-6">{{ recipe.description }}</p>
+                            <p class="text-white-600 mb-6">{{ recipe.description }}</p>
 
                             <!-- Комментарий администратора для статусов 'revision' и 'rejected' -->
                             <div v-if="recipe.status === 'revision' && recipe.revision_comment" class="mb-6 p-4 rounded-lg bg-yellow-50 border-l-4 border-yellow-400 flex items-start">
@@ -310,7 +310,7 @@ const sendToRevision = () => {
                                 </div>
                             </div>
 
-                            <div v-if="recipe.category" class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                            <div v-if="recipe.category" class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
                                 {{ recipe.category.name }}
                             </div>
 
@@ -340,7 +340,7 @@ const sendToRevision = () => {
 
                     <div class="border-t border-gray-200">
                         <div class="p-6">
-                            <h2 class="text-2xl font-bold text-gray-900 mb-6">Ингредиенты</h2>
+                            <h2 class="text-2xl font-bold text-white-900 mb-6">Ингредиенты</h2>
                             <ul class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <li 
                                     v-for="ingredient in recipe.ingredients" 
@@ -356,18 +356,18 @@ const sendToRevision = () => {
 
                     <div class="border-t border-gray-200">
                         <div class="p-6">
-                            <h2 class="text-2xl font-bold text-gray-900 mb-6">Способ приготовления</h2>
+                            <h2 class="text-2xl font-bold text-white-900 mb-6">Способ приготовления</h2>
                             <div class="space-y-6">
                                 <div 
                                     v-for="step in recipe.steps" 
                                     :key="step.id" 
                                     class="flex gap-6"
                                 >
-                                    <div class="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full bg-blue-600 text-white font-bold">
+                                    <div class="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full bg-green-600 text-white font-bold">
                                         {{ step.order }}
                                     </div>
                                     <div class="flex-1">
-                                        <p class="text-gray-600">{{ step.description }}</p>
+                                        <p class="text-white-600">{{ step.description }}</p>
                                         <img 
                                             v-if="step.image"
                                             :src="step.image"
@@ -387,7 +387,7 @@ const sendToRevision = () => {
                         
                         <!-- Форма отзыва -->
                         <div v-if="!hasUserReview && $page.props.auth.user" class="mb-8">
-                            <h3 class="text-lg font-semibold mb-4">Оставить отзыв</h3>
+                            <h3 class="text-lg  font-semibold mb-4">Оставить отзыв</h3>
                             <form @submit.prevent="submitReview" class="space-y-4">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">Оценка</label>
@@ -407,7 +407,7 @@ const sendToRevision = () => {
                                 </div>
                                 
                                 <div>
-                                    <label for="comment" class="block text-sm font-medium text-gray-700 mb-1">Комментарий</label>
+                                    <label for="comment" class="block text-sm font-medium text-black-700 mb-1">Комментарий</label>
                                     <textarea
                                         id="comment"
                                         v-model="newReview.comment"
@@ -420,7 +420,7 @@ const sendToRevision = () => {
                                 
                                 <button
                                     type="submit"
-                                    class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                                    class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
                                     :disabled="isSubmitting"
                                 >
                                     {{ isSubmitting ? 'Отправка...' : 'Отправить отзыв' }}
@@ -450,7 +450,7 @@ const sendToRevision = () => {
                                 </div>
                                 
                                 <div>
-                                    <label for="comment" class="block text-sm font-medium text-gray-700 mb-1">Комментарий</label>
+                                    <label for="comment" class="block text-sm font-medium text-black-700 mb-1">Комментарий</label>
                                     <textarea
                                         id="comment"
                                         v-model="newReview.comment"
@@ -709,7 +709,7 @@ const sendToRevision = () => {
     display: flex;
     align-items: center;
     gap: 8px;
-    color: #4a5568;
+    color: white;
 }
 
 .rating-stars {
@@ -756,7 +756,7 @@ const sendToRevision = () => {
     padding: 6px 12px;
     background: #4a5568;
     border-radius: 6px;
-    color: #4a5568;
+    color: white;
     font-size: 0.9rem;
 }
 
@@ -767,7 +767,7 @@ const sendToRevision = () => {
 .recipe-section h2 {
     font-size: 1.8rem;
     font-weight: 600;
-    color: #1a202c;
+    color: white;
     margin-bottom: 20px;
 }
 
@@ -862,6 +862,7 @@ const sendToRevision = () => {
 .reviews-section {
     background: white;
     padding: 30px;
+    color: black;
     border-radius: 12px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }

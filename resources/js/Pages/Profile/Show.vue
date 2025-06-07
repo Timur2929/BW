@@ -1,128 +1,165 @@
 <template>
   <Head title="Профиль" />
   
-  <div class="min-h-screen bg-white">
+  <div class="min-h-screen bg-gray-50">
     <Sidebar :user="user" />
     
     <div class="main-content">
+      <!-- Profile Header -->
       <div class="profile-header">
-        <!-- Фоновое изображение профиля -->
-        <div class="cover-photo">
+        <!-- Cover Photo -->
+        <div class="cover-photo-container">
           <img 
             :src="user.cover_image" 
             alt="Фоновое изображение"
-            class="w-full h-full object-cover"
+            class="cover-photo"
           />
+          <div class="cover-overlay"></div>
         </div>
         
         <!-- Profile Info -->
-        <div class="profile-info">
-          <div class="avatar-container">
+        <div class="profile-info-container">
+          <div class="avatar-wrapper">
             <img 
               :src="user.avatar_url" 
               :alt="user.first_name + ' ' + user.last_name"
-              class="avatar"
+              class="avatar-image"
             />
           </div>
-          <h1 class="name">{{ user.first_name }} {{ user.last_name }}</h1>
-          <div class="contact-info">
-            <span class="phone">{{ user.phone }}</span>
-            <span class="separator">–</span>
-            <span class="email">{{ user.email }}</span>
+          <div class="profile-details">
+            <h1 class="user-name">{{ user.first_name }} {{ user.last_name }}</h1>
+            <div class="contact-details">
+              <span class="contact-item">{{ user.phone }}</span>
+              <span class="contact-separator">•</span>
+              <span class="contact-item">{{ user.email }}</span>
+            </div>
+            <button class="edit-profile-btn" @click="$inertia.visit(route('profile.edit'))">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+              </svg>
+              Редактировать профиль
+            </button>
           </div>
-          <button class="edit-button" @click="$inertia.visit(route('profile.edit'))">
-            Изменить
-          </button>
         </div>
       </div>
 
-      <div class="recipes-section">
-        <!-- Секция для администратора -->
+      <!-- Content Section -->
+      <div class="content-container">
+        <!-- Admin Section -->
         <div v-if="user.role === 'admin'" class="admin-section">
-          <h2 class="section-title">
-            Заявки на рассмотрении 
-          </h2>
+          <div class="section-header">
+            <h2 class="section-title">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+              </svg>
+              Заявки на рассмотрении
+            </h2>
+          </div>
           
           <div v-if="pendingRecipes && pendingRecipes.length > 0" class="recipes-grid">
             <div v-for="recipe in pendingRecipes" :key="recipe.id" class="recipe-card">
-              <div class="recipe-image-container">
-                <img :src="recipe.image" :alt="recipe.title" class="recipe-image" />
-                <div class="recipe-time">{{ recipe.cooking_time }}</div>
+              <div class="recipe-image-wrapper">
+                <img :src="recipe.image" :alt="recipe.title" class="recipe-img" />
+                <div class="recipe-time-badge">{{ recipe.cooking_time }}</div>
               </div>
-              <div class="recipe-content">
+              <div class="recipe-content-wrapper">
                 <h3 class="recipe-title">{{ recipe.title }}</h3>
-                <div class="recipe-info">
-                  <div class="info-row">
-                    <span class="info-label">Категория:</span>
-                    <span class="info-value">{{ recipe.category?.name }}</span>
+                <div class="recipe-meta">
+                  <div class="meta-item">
+                    <span class="meta-label">Категория:</span>
+                    <span class="meta-value">{{ recipe.category?.name }}</span>
                   </div>
-                  <div class="info-row">
-                    <span class="info-label">Время приготовления:</span>
-                    <span class="info-value">{{ recipe.cooking_time }}</span>
+                  <div class="meta-item">
+                    <span class="meta-label">Время:</span>
+                    <span class="meta-value">{{ recipe.cooking_time }}</span>
                   </div>
-                  <div class="info-row">
-                    <span class="info-label">Автор:</span>
-                    <span class="info-value">{{ recipe.author }}</span>
+                  <div class="meta-item">
+                    <span class="meta-label">Автор:</span>
+                    <span class="meta-value">{{ recipe.author }}</span>
                   </div>
                 </div>
-                <div class="flex gap-2">
-                  <Link :href="route('recipes.show', recipe.id)" class="view-recipe-button">
-                    Перейти к рецепту
+                <div class="recipe-actions">
+                  <Link :href="route('recipes.show', recipe.id)" class="view-recipe-btn">
+                    Просмотреть рецепт
                   </Link>
                 </div>
               </div>
             </div>
           </div>
-          <div v-else class="no-pending-recipes">
-            <p>Заявок нет</p>
-          </div>
-        </div>
-
-        <!-- Существующая секция с рецептами -->
-        <h2 class="recipes-title">
-          Ваши рецепты
-          <span class="arrow">→</span>
-        </h2>
-        
-        <div v-if="user.recipes && user.recipes.length > 0" class="recipes-grid">
-          <div v-for="recipe in user.recipes" :key="recipe.id" class="recipe-card profile-recipe-card">
-            <Link :href="route('recipes.show', recipe.id)" class="recipe-link">
-              <div class="recipe-image-container profile-image-container">
-                <img :src="recipe.image" :alt="recipe.title" class="recipe-image profile-image" />
-                <span v-if="recipe.status === 'pending'" class="status-badge profile-status-badge bg-yellow-100 text-yellow-800">На рассмотрении</span>
-                <span v-else-if="recipe.status === 'approved'" class="status-badge profile-status-badge bg-green-100 text-green-800">Одобрен</span>
-                <span v-else-if="recipe.status === 'rejected'" class="status-badge profile-status-badge bg-red-100 text-red-800">Отклонён</span>
-                <span v-else-if="recipe.status === 'revision'" class="status-badge profile-status-badge bg-yellow-200 text-yellow-900">На доработке</span>
-                <span class="profile-cooking-time">{{ recipe.cooking_time }}</span>
-              </div>
-              <div class="recipe-content profile-recipe-content">
-                <div class="flex items-center gap-2 mb-2">
-                  <span class="text-xs text-gray-500">Автор:</span>
-                  <span class="text-xs text-gray-700 font-semibold">{{ user.first_name }} {{ user.last_name }}</span>
-                </div>
-                <div class="flex items-center gap-2 mb-2 flex-wrap">
-                  <span class="recipe-category text-xs bg-gray-100 px-2 py-1 rounded" v-if="recipe.category">{{ recipe.category }}</span>
-                </div>
-                <h3 class="recipe-title font-semibold text-base mb-1 line-clamp-1">{{ recipe.title }}</h3>
-                <p class="recipe-description text-xs text-gray-600 mb-2 line-clamp-2">{{ recipe.description }}</p>
-                <div class="flex items-center gap-1 mb-1">
-                  <span v-for="i in 5" :key="i" class="star profile-star" :class="{ 'filled': i <= (recipe.rating || 0) }">★</span>
-                  <span class="text-xs text-gray-500 ml-1">{{ recipe.rating || '0.0' }}</span>
-                </div>
-              </div>
-            </Link>
-            <div v-if="recipe.status === 'revision'" class="mt-2 text-center">
-              <Link :href="route('recipes.edit', recipe.id)" class="edit-recipe-button">
-                Редактировать
-              </Link>
+          <div v-else class="empty-state">
+            <div class="empty-state-content">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <p class="empty-state-text">Нет заявок на рассмотрение</p>
             </div>
           </div>
         </div>
-        <div v-else class="no-recipes">
-          <p class="text-gray-500 mb-4">У вас пока нет рецептов</p>
-          <button @click="navigateToSubmitRecipe" class="suggest-recipe-button">
-            Предложить рецепт
-          </button>
+
+        <!-- User Recipes Section -->
+        <div class="user-recipes-section">
+          <div class="section-header">
+            <h2 class="section-title">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+              </svg>
+              Ваши рецепты
+            </h2>
+          </div>
+          
+          <div v-if="user.recipes && user.recipes.length > 0" class="recipes-grid">
+            <div v-for="recipe in user.recipes" :key="recipe.id" class="user-recipe-card">
+              <Link :href="route('recipes.show', recipe.id)" class="recipe-link">
+                <div class="recipe-img-container">
+                  <img :src="recipe.image" :alt="recipe.title" class="recipe-main-img" />
+                  <span v-if="recipe.status === 'pending'" class="status-badge pending">На рассмотрении</span>
+                  <span v-else-if="recipe.status === 'approved'" class="status-badge approved">Одобрен</span>
+                  <span v-else-if="recipe.status === 'rejected'" class="status-badge rejected">Отклонён</span>
+                  <span v-else-if="recipe.status === 'revision'" class="status-badge revision">На доработке</span>
+                  <span class="cooking-time">{{ recipe.cooking_time }}</span>
+                </div>
+                <div class="recipe-details">
+                  <div class="author-info">
+                    <span class="author-label">Автор:</span>
+                    <span class="author-name">{{ user.first_name }} {{ user.last_name }}</span>
+                  </div>
+                  <div class="category-tag" v-if="recipe.category">
+                    {{ recipe.category }}
+                  </div>
+                  <h3 class="recipe-main-title">{{ recipe.title }}</h3>
+                  <p class="recipe-description">{{ recipe.description }}</p>
+                  <div class="rating-container">
+                    <div class="stars">
+                      <span v-for="i in 5" :key="i" class="star-icon" :class="{ 'filled': i <= (recipe.rating || 0) }">★</span>
+                    </div>
+                    <span class="rating-value">{{ recipe.rating || '0.0' }}</span>
+                  </div>
+                </div>
+              </Link>
+              <div v-if="recipe.status === 'revision'" class="edit-recipe-btn-container">
+                <Link :href="route('recipes.edit', recipe.id)" class="edit-recipe-btn">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                  </svg>
+                  Редактировать
+                </Link>
+              </div>
+            </div>
+          </div>
+          <div v-else class="empty-state">
+            <div class="empty-state-content">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+              <p class="empty-state-text">У вас пока нет рецептов</p>
+              <button @click="navigateToSubmitRecipe" class="add-recipe-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
+                </svg>
+                Добавить рецепт
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -157,406 +194,436 @@ const rejectRecipe = (recipeId) => {
 
 <style scoped>
 .main-content {
-    margin-left: 250px;
+    margin-left: 280px;
     min-height: 100vh;
-    background-color: #4a5568;
+    background-color: #374151;
 }
 
+/* Profile Header Styles */
 .profile-header {
     position: relative;
-    height: 500px;
+    margin-bottom: 60px;
+}
+
+.cover-photo-container {
+    position: relative;
+    height: 320px;
+    overflow: hidden;
 }
 
 .cover-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.cover-overlay {
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
-    height: 520px;
-    overflow: hidden;
+    bottom: 0;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.6));
 }
 
-.cover-photo img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+.profile-info-container {
+    position: relative;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 30px;
+    transform: translateY(-80px);
 }
 
-.profile-info {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 50px;
-    text-align: center;
-}
-
-.avatar-container {
-    width: 150px;
-    height: 150px;
-    margin: 0 auto 20px;
-    border: 4px solid white;
+.avatar-wrapper {
+    width: 160px;
+    height: 160px;
+    border: 5px solid white;
     border-radius: 50%;
     overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
     background-color: white;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
 }
 
-.avatar {
+.avatar-image {
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
 
-.name {
-    font-size: 24px;
-    font-weight: 600;
-    margin-bottom: 10px;
-    color: #ffffff;
+.profile-details {
+    padding-left: 20px;
 }
 
-.contact-info {
-    font-size: 16px;
-    margin-bottom: 20px;
-    color: #ffffff;
-}
-
-.separator {
-    margin: 0 10px;
-    color: #ffffff;
-}
-
-.edit-button {
-    background-color: #666;
+.user-name {
+    font-size: 28px;
+    font-weight: 700;
     color: white;
-    padding: 8px 24px;
-    border-radius: 6px;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.2s;
+    margin-bottom: 8px;
 }
 
-.edit-button:hover {
-    background-color: #555;
-}
-
-.recipes-section {
-    padding: 40px;
-}
-
-.recipes-title {
-    font-size: 20px;
-    font-weight: 600;
-    margin-bottom: 30px;
+.contact-details {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
+    margin-bottom: 20px;
+    color: white;
+    font-size: 16px;
 }
 
-.arrow {
-    color: #666;
+.contact-separator {
+    color: #d1d5db;
 }
 
+.edit-profile-btn {
+    display: inline-flex;
+    align-items: center;
+    background-color: green;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.edit-profile-btn:hover {
+    background-color: green;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+/* Content Container */
+.content-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 30px 60px;
+}
+
+/* Section Styles */
+.section-header {
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    font-size: 22px;
+    font-weight: 600;
+    color: white;
+}
+
+/* Recipes Grid */
 .recipes-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 30px;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
+    margin-bottom: 40px;
 }
 
+/* Recipe Card Styles */
 .recipe-card {
     background: white;
     border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .recipe-card:hover {
     transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
 }
 
-.recipe-image-container {
+.recipe-image-wrapper {
     position: relative;
-    width: 100%;
-    height: 200px;
+    height: 180px;
     overflow: hidden;
 }
 
-.recipe-image {
+.recipe-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.3s ease;
+    transition: transform 0.4s ease;
 }
 
-.recipe-card:hover .recipe-image {
+.recipe-card:hover .recipe-img {
     transform: scale(1.05);
 }
 
-.recipe-time {
+.recipe-time-badge {
     position: absolute;
-    bottom: 10px;
-    right: 10px;
-    background-color: rgba(0, 0, 0, 0.7);
+    bottom: 12px;
+    right: 12px;
+    background-color: rgba(0,0,0,0.7);
     color: white;
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 14px;
-}
-
-.recipe-content {
-    padding: 20px;
-}
-
-.recipe-info {
-    margin: 16px 0;
-}
-
-.info-row {
-    display: flex;
-    margin-bottom: 8px;
-    font-size: 14px;
-    color: #4a5568;
-}
-
-.info-label {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 13px;
     font-weight: 500;
-    color: #2d3748;
-    width: 140px;
 }
 
-.info-value {
-    color: #4a5568;
+.recipe-content-wrapper {
+    padding: 18px;
 }
 
 .recipe-title {
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 600;
-    color: #1a202c;
+    color: #111827;
     margin-bottom: 12px;
+    line-height: 1.3;
 }
 
-.recipe-category {
-    color: #4a5568;
-    font-size: 14px;
-    margin-bottom: 8px;
-}
-
-.recipe-description {
-    color: #4a5568;
-    font-size: 14px;
-    margin-bottom: 12px;
-    line-height: 1.4;
-}
-
-.recipe-author {
-    font-size: 14px;
-    color: #4a5568;
+.recipe-meta {
     margin-bottom: 16px;
 }
 
-.recipe-author span {
-    color: #2d3748;
-    font-weight: 500;
+.meta-item {
+    display: flex;
+    margin-bottom: 8px;
+    font-size: 14px;
 }
 
-.view-recipe-button {
+.meta-label {
+    font-weight: 500;
+    color: #374151;
+    min-width: 100px;
+}
+
+.meta-value {
+    color: #6b7280;
+}
+
+.view-recipe-btn {
     display: block;
     width: 100%;
-    padding: 12px;
-    background-color: #4a5568;
+    padding: 10px;
+    background-color: #374151;
     color: white;
     text-align: center;
     border-radius: 6px;
     font-weight: 500;
     transition: background-color 0.2s;
-    text-decoration: none;
-    margin-top: 20px;
 }
 
-.view-recipe-button:hover {
-    background-color: #2d3748;
+.view-recipe-btn:hover {
+    background-color: green;
 }
 
-.no-recipes {
-    text-align: center;
-    padding: 40px;
-}
-
-.suggest-recipe-button {
-    background-color: #4CAF50;
-    color: white;
-    padding: 12px 24px;
-    border-radius: 6px;
-    border: none;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.2s;
-}
-
-.suggest-recipe-button:hover {
-    background-color: #45a049;
-}
-
-.admin-section {
-    margin-bottom: 40px;
-}
-
-.section-title {
-    font-size: 24px;
-    font-weight: 600;
-    margin-bottom: 20px;
-    color: white;
-}
-
-.no-pending-recipes {
-    text-align: center;
-    padding: 40px;
-    background-color: #f7fafc;
+/* User Recipe Card */
+.user-recipe-card {
+    background: white;
     border-radius: 12px;
-    color: #4a5568;
-}
-
-.recipe-actions {
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
     display: flex;
-    gap: 8px;
-    margin-top: 16px;
+    flex-direction: column;
 }
 
-.action-button {
-    flex: 1;
-    padding: 8px 16px;
-    border-radius: 6px;
-    font-weight: 500;
-    text-align: center;
-    transition: all 0.2s;
-    cursor: pointer;
-    border: none;
+.user-recipe-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
 }
 
-.action-button.approve {
-    background-color: #10B981;
-    color: white;
+.recipe-img-container {
+    position: relative;
+    height: 180px;
+    overflow: hidden;
 }
 
-.action-button.approve:hover {
-    background-color: #059669;
+.recipe-main-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
 }
 
-.action-button.reject {
-    background-color: #EF4444;
-    color: white;
-}
-
-.action-button.reject:hover {
-    background-color: #DC2626;
-}
-
-.action-button.review {
-    background-color: #F59E0B;
-    color: white;
-}
-
-.action-button.review:hover {
-    background-color: #D97706;
+.user-recipe-card:hover .recipe-main-img {
+    transform: scale(1.05);
 }
 
 .status-badge {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  padding: 4px 10px;
-  border-radius: 8px;
-  font-size: 12px;
-  font-weight: 600;
-  z-index: 2;
-}
-.star {
-  color: #cbd5e0;
-  font-size: 16px;
-}
-.star.filled {
-  color: #ecc94b;
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-.profile-recipe-card {
-  border-radius: 18px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.07), 0 1.5px 4px rgba(0,0,0,0.04);
-  transition: box-shadow 0.2s, transform 0.2s;
-  background: #fff;
-  border: 1px solid #f3f4f6;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  min-height: 420px;
+.pending {
+    background-color: #fef3c7;
+    color: #92400e;
 }
-.profile-recipe-card:hover {
-  box-shadow: 0 8px 24px rgba(0,0,0,0.13), 0 2px 8px rgba(0,0,0,0.07);
-  transform: translateY(-4px) scale(1.02);
+
+.approved {
+    background-color: #d1fae5;
+    color: #065f46;
 }
-.profile-image-container {
-  position: relative;
-  width: 100%;
-  height: 180px;
-  overflow: hidden;
-  border-radius: 18px 18px 0 0;
+
+.rejected {
+    background-color: #fee2e2;
+    color: #991b1b;
 }
-.profile-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.3s;
+
+.revision {
+    background-color: #fef9c3;
+    color: #854d0e;
 }
-.profile-recipe-card:hover .profile-image {
-  transform: scale(1.04);
+
+.cooking-time {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    background-color: rgba(0,0,0,0.7);
+    color: white;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
 }
-.profile-status-badge {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  padding: 4px 12px;
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 600;
-  z-index: 2;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+
+.recipe-details {
+    padding: 18px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 }
-.profile-recipe-content {
-  padding: 18px;
-  flex: 1 1 auto;
-  display: flex;
-  flex-direction: column;
+
+.author-info {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 10px;
+    font-size: 13px;
 }
-.profile-star {
-  color: #e2e8f0;
-  font-size: 16px;
-  transition: color 0.2s;
+
+.author-label {
+    color: #6b7280;
 }
-.profile-star.filled {
-  color: #fbbf24;
+
+.author-name {
+    color: #4b5563;
+    font-weight: 500;
 }
-.line-clamp-1 {
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+
+.category-tag {
+    display: inline-block;
+    background-color: #f3f4f6;
+    color: #4b5563;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    margin-bottom: 12px;
+    align-self: flex-start;
 }
-.line-clamp-2 {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+
+.recipe-main-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 8px;
+    line-height: 1.3;
 }
-.profile-cooking-time {
-  position: absolute;
-  right: 14px;
-  bottom: 14px;
-  background: rgba(44, 44, 44, 0.85);
-  color: #fff;
-  padding: 5px 14px;
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 500;
-  z-index: 2;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+
+.recipe-description {
+    color: #6b7280;
+    font-size: 14px;
+    line-height: 1.4;
+    margin-bottom: 16px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
-</style> 
+
+.rating-container {
+    display: flex;
+    align-items: center;
+    margin-top: auto;
+}
+
+.stars {
+    display: flex;
+}
+
+.star-icon {
+    color: #e5e7eb;
+    font-size: 16px;
+}
+
+.star-icon.filled {
+    color: #f59e0b;
+}
+
+.rating-value {
+    color: #6b7280;
+    font-size: 14px;
+    margin-left: 6px;
+}
+
+.edit-recipe-btn-container {
+    padding: 0 18px 18px;
+}
+
+.edit-recipe-btn {
+    display: inline-flex;
+    align-items: center;
+    background-color: #f3f4f6;
+    color: #4b5563;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.edit-recipe-btn:hover {
+    background-color: #e5e7eb;
+    color: #1f2937;
+}
+
+/* Empty State Styles */
+.empty-state {
+    background-color: white;
+    border-radius: 12px;
+    padding: 40px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.empty-state-content {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.empty-state-text {
+    color: #6b7280;
+    font-size: 16px;
+    margin: 16px 0 24px;
+}
+
+.add-recipe-btn {
+    display: inline-flex;
+    align-items: center;
+    background-color: #374151;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.add-recipe-btn:hover {
+    background-color: green;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+</style>

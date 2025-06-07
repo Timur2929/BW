@@ -8,7 +8,7 @@
                         <div v-if="category.image" class="mb-4">
                             <img :src="category.image" :alt="category.name" class="w-40 h-32 object-cover rounded shadow" />
                         </div>
-                        <h1 class="text-3xl font-bold text-gray-900">{{ category.name }}</h1>
+                        <h1 class="text-3xl font-bold text-white-900">{{ category.name }}</h1>
                         <p class="mt-2 text-gray-600">{{ category.description }}</p>
                     </div>
                     <button
@@ -90,7 +90,7 @@
 
                             <Link
                                 :href="route('recipes.show', recipe.id)"
-                                class="mt-4 w-full inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
+                                class="mt-4 w-full inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gray-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
                             >
                                 Перейти к рецепту
                                 <svg class="ml-2 -mr-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
