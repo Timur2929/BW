@@ -22,17 +22,17 @@ function handleImageError() {
 </script>
 
 <template>
-    <Head title="Кулинарные рецепты" />
+    <Head title="Изделия ручной работы" />
     <AppLayout>
         <!-- Hero Section -->
         <div class="hero-section">
             <div class="hero-content">
-                <h1 class="hero-title">Мир Кулинарных Рецептов</h1>
-                <p class="hero-subtitle">Откройте для себя удивительные рецепты от шеф-поваров со всего мира</p>
+                <h1 class="hero-title">Изделия которые дают жизни!</h1>
+                <p class="hero-subtitle">Откройте для себя удивительные украшения со всего мира</p>
                 <div class="hero-stats">
                     <div class="stat-item">
                         <span class="stat-number">{{ tastyRecipes.length }}+</span>
-                        <span class="stat-label">Рецептов</span>
+                        <span class="stat-label">Изделий</span>
                     </div>
                     <div class="stat-item">
                         <span class="stat-number">{{ popularCategories.length }}+</span>
@@ -54,7 +54,7 @@ function handleImageError() {
                 <h2 class="section-title">
                     Популярные Категории
                 </h2>
-                <p class="section-subtitle">Выберите категорию блюд по вашему вкусу</p>
+                <p class="section-subtitle">Выберите категорию изделий по вашему вкусу</p>
             </div>
             <div class="categories-grid">
                 <Link 
@@ -80,9 +80,9 @@ function handleImageError() {
         <section class="content-section">
             <div class="section-header">
                 <h2 class="section-title">
-                    Лучшие Рецепты
+                    Лучшие Изделия
                 </h2>
-                <p class="section-subtitle">Самые популярные и вкусные рецепты от наших поваров</p>
+                <p class="section-subtitle">Самые популярные изделия</p>
             </div>
             <div class="recipes-grid">
                 <Link 

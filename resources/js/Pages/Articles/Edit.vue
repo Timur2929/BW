@@ -6,7 +6,7 @@
                 <h1 class="text-2xl font-bold mb-6">Редактировать статью</h1>
                 <form @submit.prevent="submit" class="bg-white rounded-lg shadow p-6">
                     <div class="mb-4">
-                        <label for="title" class="block text-sm font-medium text-gray-700 mb-1">Название статьи</label>
+                        <label for="title" class="block text-sm font-medium text-blue-700 mb-1">Название статьи</label>
                         <input
                             type="text"
                             id="title"
@@ -17,7 +17,7 @@
                         <p v-if="form.errors.title" class="mt-1 text-sm text-red-600">{{ form.errors.title }}</p>
                     </div>
                     <div class="mb-4">
-                        <label for="content" class="block text-sm font-medium text-gray-700 mb-1">Содержание статьи</label>
+                        <label for="content" class="block text-sm font-medium text-blue-700 mb-1">Содержание статьи</label>
                         <textarea
                             id="content"
                             v-model="form.content"

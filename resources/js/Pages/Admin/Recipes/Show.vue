@@ -33,7 +33,7 @@
                     <!-- Основная информация -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                         <div>
-                            <h2 class="text-lg font-semibold mb-2">Информация о рецепте</h2>
+                            <h2 class="text-lg font-semibold mb-2">Информация о украшении</h2>
                             <div class="space-y-2">
                                 <p><span class="font-medium">Автор:</span> {{ recipe.user.name }}</p>
                                 <p><span class="font-medium">Категория:</span> {{ recipe.category?.name || 'Не указана' }}</p>
@@ -145,19 +145,19 @@ const getStatusText = (status) => {
 };
 
 const approveRecipe = () => {
-    if (confirm('Вы уверены, что хотите одобрить этот рецепт?')) {
+    if (confirm('Вы уверены, что хотите одобрить это изделие?')) {
         router.post(route('admin.recipes.approve', props.recipe.id));
     }
 };
 
 const rejectRecipe = () => {
-    if (confirm('Вы уверены, что хотите отклонить этот рецепт?')) {
+    if (confirm('Вы уверены, что хотите отклонить это изделие?')) {
         router.post(route('admin.recipes.reject', props.recipe.id));
     }
 };
 
 const requestRevision = () => {
-    if (confirm('Вы уверены, что хотите отправить этот рецепт на доработку?')) {
+    if (confirm('Вы уверены, что хотите отправить это изделие на доработку?')) {
         router.post(route('admin.recipes.revision', props.recipe.id));
     }
 };

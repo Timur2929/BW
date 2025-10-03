@@ -12,22 +12,21 @@ class ArticleSeeder extends Seeder
     {
         $articles = [
             [
-                'title' => 'Бешбармак?',
-                'content' => 'Национальное блюдо тюркских народов, которое представляет собой отварное мясо,
-                 приправленное луковым соусом, зеленью и смешанное с самодельной лапшей',
-                'image' => 'app/public/images/articles/beshbarmak.jpg',
+                'title' => 'Колье',
+                'content' => 'Откуда взялось колье? каково его происхождение?',
+                'image' => 'images/articles/col.jpg',
                 'status' => 'published',
             ],
             [
-                'title' => 'Откуда взялась пицца?',
-                'content' => 'Удивительная история возникновения блюда',
-                'image' => 'app/public/images/articles/pizaathat.jpg',
+                'title' => 'Серьги',
+                'content' => 'Удивительная история возникновения этого украшения',
+                'image' => 'images/articles/sergi.jpg',
                 'status' => 'published',
             ],
             [
-                'title' => 'Лазанья Домашняя',
-                'content' => 'Замечательная лазанья на вашем столе',
-                'image' => 'app/public/images/articles/lasagna.jpg',
+                'title' => 'Браслета',
+                'content' => 'MAN WAT?',
+                'image' => 'images/articles/brasleti.jpg',
                 'status' => 'published',
             ],
         ];

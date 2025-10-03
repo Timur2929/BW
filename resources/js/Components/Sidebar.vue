@@ -61,7 +61,7 @@ const logout = () => {
                             <path d="M21 12h-6m-6 0H3"/>
                         </svg>
                     </div>
-                    <span class="nav-text">Рецепты</span>
+                    <span class="nav-text">Изделия</span>
                 </Link>
                 
                 
@@ -77,6 +77,17 @@ const logout = () => {
                     <span class="nav-text">Категории</span>
                 </Link>
                 
+                <Link href="/articles" class="nav-item">
+                    <div class="nav-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <rect x="3" y="3" width="7" height="7"/>
+                            <rect x="14" y="3" width="7" height="7"/>
+                            <rect x="14" y="14" width="7" height="7"/>
+                            <rect x="3" y="14" width="7" height="7"/>
+                        </svg>
+                    </div>
+                    <span class="nav-text">Статьи</span>
+                </Link>
                 
             </div>
 

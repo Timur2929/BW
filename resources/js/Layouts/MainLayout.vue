@@ -17,7 +17,7 @@
                                 Главная
                             </NavLink>
                             <NavLink :href="route('recipes.index')" :active="route().current('recipes.index')">
-                                Рецепты
+                                Изделия
                             </NavLink>
                             <NavLink :href="route('categories.index')" :active="route().current('categories.index')">
                                 Категории
@@ -111,7 +111,7 @@
                         Главная
                     </ResponsiveNavLink>
                     <ResponsiveNavLink :href="route('recipes.index')" :active="route().current('recipes.index')">
-                        Рецепты
+                        Изделия
                     </ResponsiveNavLink>
                     <ResponsiveNavLink :href="route('categories.index')" :active="route().current('categories.index')">
                         Категории

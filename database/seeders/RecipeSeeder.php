@@ -15,7 +15,7 @@ class RecipeSeeder extends Seeder
           
                  [
         'name' => 'Гуляш из говядины',
-        'category_name' => 'Мясные блюда',
+        'category_name' => 'Колье',
         'description' => 'Ароматное мясное рагу с подливкой, идеально подходит к гарнирам.',
         'cooking_time' => '1,5 часа',
         'image' => 'images/recipes/gulash.png',
@@ -34,7 +34,7 @@ class RecipeSeeder extends Seeder
     ],
     [
         'name' => 'Куриный суп с лапшой',
-        'category_name' => 'Супы',
+        'category_name' => 'Серьги',
         'description' => 'Лёгкий прозрачный суп с домашней лапшой.',
         'cooking_time' => '45 минут',
         'image' => 'images/recipes/lapsha.png',
@@ -52,7 +52,7 @@ class RecipeSeeder extends Seeder
     ],
     [
         'name' => 'Оливье',
-        'category_name' => 'Салаты',
+        'category_name' => 'Сувениры',
         'description' => 'Классический праздничный салат с колбасой.',
         'cooking_time' => '30 минут',
         'image' => 'images/recipes/oleve.png',
@@ -70,7 +70,7 @@ class RecipeSeeder extends Seeder
     ],
     [
         'name' => 'Тирамису',
-        'category_name' => 'Десерты',
+        'category_name' => 'Браслеты',
         'description' => 'Итальянский десерт с кофейным вкусом.',
         'cooking_time' => '2 часа',
         'image' => 'images/recipes/tiramis.png',
@@ -88,7 +88,7 @@ class RecipeSeeder extends Seeder
     ],
     [
         'name' => 'Блины',
-        'category_name' => 'Выпечка',
+        'category_name' => 'Чокеры',
         'description' => 'Тонкие блины на молоке.',
         'cooking_time' => '30 минут',
         'image' => 'images/recipes/blene.png',
@@ -106,7 +106,7 @@ class RecipeSeeder extends Seeder
     ],
     [
         'name' => 'Мохито',
-        'category_name' => 'Напитки',
+        'category_name' => 'Брошки',
         'description' => 'Освежающий коктейль с мятой и лаймом.',
         'cooking_time' => '5 минут',
         'image' => 'images/recipes/moxito.png',
@@ -124,7 +124,7 @@ class RecipeSeeder extends Seeder
     ],
     [
         'name' => 'Жаркое из свинины',
-        'category_name' => 'Мясные блюда',
+        'category_name' => 'Брошки',
         'description' => 'Свинина, тушёная с картофелем.',
         'cooking_time' => '1 час',
         'image' => 'images/recipes/jarkoe.png',
@@ -142,7 +142,7 @@ class RecipeSeeder extends Seeder
     ],
     [
         'name' => 'Греческий салат',
-        'category_name' => 'Салаты',
+        'category_name' => 'Сувениры',
         'description' => 'Свежий салат с фетаксой и оливками.',
         'cooking_time' => '15 минут',
         'image' => 'images/recipes/grecheski.png',
@@ -160,7 +160,7 @@ class RecipeSeeder extends Seeder
     ],
     [
         'name' => 'Шарлотка',
-        'category_name' => 'Выпечка',
+        'category_name' => 'Серьги',
         'description' => 'Яблочный пирог на бисквитном тесте.',
         'cooking_time' => '50 минут',
         'image' => 'images/recipes/sharla.png',

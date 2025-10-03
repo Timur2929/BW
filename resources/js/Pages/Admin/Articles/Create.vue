@@ -8,7 +8,7 @@
 
                 <form @submit.prevent="submit" class="bg-white rounded-lg shadow p-6">
                     <div class="mb-4">
-                        <label for="title" class="block text-sm font-medium text-gray-700 mb-1">Заголовок</label>
+                        <label for="title" class="block text-sm font-medium text-blue-700 mb-1">Заголовок</label>
                         <input
                             type="text"
                             id="title"
@@ -20,7 +20,7 @@
                     </div>
 
                     <div class="mb-4">
-                        <label for="content" class="block text-sm font-medium text-gray-700 mb-1">Содержание</label>
+                        <label for="content" class="block text-sm font-medium text-blue-700 mb-1">Содержание</label>
                         <textarea
                             id="content"
                             v-model="form.content"
@@ -32,7 +32,7 @@
                     </div>
 
                     <div class="mb-4">
-                        <label for="image" class="block text-sm font-medium text-gray-700 mb-1">Изображение</label>
+                        <label for="image" class="block text-sm font-medium text-blue-700 mb-1">Изображение</label>
                         <input
                             type="file"
                             id="image"
@@ -44,7 +44,7 @@
                     </div>
 
                     <div class="mb-4">
-                        <label for="status" class="block text-sm font-medium text-gray-700 mb-1">Статус</label>
+                        <label for="status" class="block text-sm font-medium text-blue-700 mb-1">Статус</label>
                         <select
                             id="status"
                             v-model="form.status"

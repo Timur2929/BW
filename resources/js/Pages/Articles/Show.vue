@@ -37,7 +37,7 @@ const deleteArticle = () => {
                     </div>
                     <div class="p-8">
                         <div class="flex items-center justify-between mb-4">
-                            <h1 class="text-3xl font-bold mb-4">{{ article.title }}</h1>
+                            <h1 class="text-3xl font-bold mb-4 text-blue-700">{{ article.title }}</h1>
                             <button
                                 v-if="$page.props.auth.user && $page.props.auth.user.role === 'admin'"
                                 @click="deleteArticle"

@@ -19,7 +19,7 @@
                             </Link>
                             <Link :href="route('recipes.index')"
                                   class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium leading-5 text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition">
-                                Рецепты
+                                Изделия
                             </Link>
                             <Link :href="route('categories.index')"
                                   class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium leading-5 text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition">
@@ -60,7 +60,7 @@
         <footer class="bg-white border-t border-gray-200 mt-auto">
             <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
                 <div class="text-center text-sm text-gray-500">
-                    © 2024 Кулинарные рецепты. Все права защищены.
+                    © 2024 Украшения ручной работы. Все права защищены.
                 </div>
             </div>
         </footer>
