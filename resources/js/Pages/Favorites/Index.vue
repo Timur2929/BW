@@ -3,7 +3,7 @@
         <Head title="Избранное" />
 
         <div class="favorites-container">
-            <h1 class="page-title">Избранные рецепты</h1>
+            <h1 class="page-title">Избранные Украшения</h1>
             
             <div v-if="favorites.length > 0" class="recipes-grid">
                 <div v-for="recipe in favorites" :key="recipe.id" class="recipe-card">
@@ -62,10 +62,10 @@
                 <div class="empty-icon">
                     <i class="far fa-heart"></i>
                 </div>
-                <h2>У вас пока нет избранных рецептов</h2>
-                <p>Добавляйте понравившиеся рецепты в избранное, чтобы сохранить их для быстрого доступа</p>
+                <h2>У вас пока нет избранных украшений</h2>
+                <p>Добавляйте понравившиеся украшения в избранное, чтобы сохранить их для быстрого доступа</p>
                 <Link href="/recipes" class="browse-recipes-btn">
-                    Посмотреть все рецепты
+                    Посмотреть все украшения
                 </Link>
             </div>
         </div>
