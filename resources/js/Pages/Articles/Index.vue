@@ -24,7 +24,7 @@
                     <Link :href="route('articles.show', article.id)" class="article-link">
                         <div class="article-image">
                            <img 
-                            :src="article.image || '/images/article-placeholder.jpg'" 
+                            :src="article.image || 'images/categories/Kamenika.jpg'" 
                             :alt="article.title"
                             class="article-img"
                                 >
@@ -59,7 +59,7 @@
                     <i class="far fa-newspaper"></i>
                 </div>
                 <h2>Статей пока нет</h2>
-                <p>Здесь будут появляться полезные статьи о кулинарии и не только</p>
+                <p>Здесь будут появляться полезные статьи об украшениях и не только</p>
                 
                 <Link 
                     v-if="$page.props.auth.user && $page.props.auth.user.role === 'admin'"
@@ -116,13 +116,13 @@ const formatDate = (date) => {
 .page-title {
     font-size: 32px;
     font-weight: 700;
-    color: #2d3748;
+    color: white;
     margin-bottom: 8px;
 }
 
 .page-subtitle {
     font-size: 16px;
-    color: #718096;
+    color: #4CAF50;
     max-width: 600px;
 }
 

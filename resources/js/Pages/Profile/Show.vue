@@ -80,7 +80,7 @@
                 </div>
                 <div class="recipe-actions">
                   <Link :href="route('recipes.show', recipe.id)" class="view-recipe-btn">
-                    Просмотреть рецепт
+                    Просмотреть изделие
                   </Link>
                 </div>
               </div>
@@ -103,7 +103,7 @@
               <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
               </svg>
-              Ваши рецепты
+              Ваши Украшения
             </h2>
           </div>
           
@@ -151,12 +151,12 @@
               <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
               </svg>
-              <p class="empty-state-text">У вас пока нет рецептов</p>
+              <p class="empty-state-text">У вас пока нет украшений</p>
               <button @click="navigateToSubmitRecipe" class="add-recipe-btn">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
                   <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
                 </svg>
-                Добавить рецепт
+                Добавить украшение
               </button>
             </div>
           </div>

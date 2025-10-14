@@ -35,7 +35,7 @@ const logout = () => {
                         <line x1="6" y1="17" x2="18" y2="17"/>
                     </svg>
                 </div>
-                <span class="logo-text">BlinoW</span>
+                <span class="logo-text">KAMENIKA</span>
             </div>
         </div>
 
