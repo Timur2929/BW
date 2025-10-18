@@ -24,8 +24,8 @@ class ArticleSeeder extends Seeder
                 'status' => 'published',
             ],
             [
-                'title' => 'Браслета',
-                'content' => 'MAN WAT?',
+                'title' => 'Браслет',
+                'content' => 'Все началось в древней греции...',
                 'image' => 'images/articles/brasleti.jpg',
                 'status' => 'published',
             ],

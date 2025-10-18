@@ -11,7 +11,7 @@
                             type="text"
                             id="name"
                             v-model="form.name"
-                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            class="w-full px-3 py-2 border border-gray-300 text-blue-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                             :class="{ 'border-red-500': form.errors.name }"
                         />
                         <p v-if="form.errors.name" class="mt-1 text-sm text-red-600">{{ form.errors.name }}</p>

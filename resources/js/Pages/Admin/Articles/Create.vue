@@ -4,7 +4,7 @@
 
         <div class="container mx-auto px-4 py-8">
             <div class="max-w-3xl mx-auto">
-                <h1 class="text-2xl font-bold mb-6">Создание новой статьи</h1>
+                <h1 class="text-2xl text-blue-700 font-bold mb-6">Создание новой статьи</h1>
 
                 <form @submit.prevent="submit" class="bg-white rounded-lg shadow p-6">
                     <div class="mb-4">
@@ -13,7 +13,7 @@
                             type="text"
                             id="title"
                             v-model="form.title"
-                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            class="w-full px-3 py-2 border border-gray-300 text-blue-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                             :class="{ 'border-red-500': form.errors.title }"
                         />
                         <p v-if="form.errors.title" class="mt-1 text-sm text-red-600">{{ form.errors.title }}</p>
@@ -25,7 +25,7 @@
                             id="content"
                             v-model="form.content"
                             rows="10"
-                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            class="w-full px-3 py-2 border border-gray-300 text-blue-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                             :class="{ 'border-red-500': form.errors.content }"
                         ></textarea>
                         <p v-if="form.errors.content" class="mt-1 text-sm text-red-600">{{ form.errors.content }}</p>
@@ -37,7 +37,7 @@
                             type="file"
                             id="image"
                             @input="form.image = $event.target.files[0]"
-                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            class="w-full px-3 py-2 border border-gray-300 text-blue-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                             :class="{ 'border-red-500': form.errors.image }"
                         />
                         <p v-if="form.errors.image" class="mt-1 text-sm text-red-600">{{ form.errors.image }}</p>
@@ -48,7 +48,7 @@
                         <select
                             id="status"
                             v-model="form.status"
-                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            class="w-full px-3 py-2 border border-gray-300 text-blue-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                             :class="{ 'border-red-500': form.errors.status }"
                         >
                             <option value="draft">Черновик</option>
