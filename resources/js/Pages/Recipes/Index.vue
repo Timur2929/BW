@@ -7,8 +7,8 @@
       <section class="hero-section">
         <div class="hero-overlay"></div>
         <div class="hero-content">
-          <h1 class="hero-title">Исследуйте мир вкусов</h1>
-          <p class="hero-subtitle">Тысячи рецептов для настоящих гурманов</p>
+          <h1 class="hero-title">Исследуйте мир украшений</h1>
+          <p class="hero-subtitle">Украшения для настоящих ценителей</p>
           
           <div class="hero-search">
             <div class="search-container">
@@ -19,7 +19,7 @@
               <input
                 type="text"
                 v-model="searchQuery"
-                placeholder="Найти рецепт..."
+                placeholder="Найти украшение..."
                 class="search-input"
                 @keyup.enter="filterRecipes"
               >
@@ -91,7 +91,7 @@
                 <line x1="12" y1="5" x2="12" y2="19"></line>
                 <line x1="5" y1="12" x2="19" y2="12"></line>
               </svg>
-              Добавить рецепт
+              Добавить украшение
             </Link>
           </div>
         </aside>
@@ -137,14 +137,14 @@
               <line x1="3" y1="6" x2="21" y2="6"></line>
               <path d="M16 10a4 4 0 0 1-8 0"></path>
             </svg>
-            <h3>Рецепты не найдены</h3>
+            <h3>Украшения не найдены</h3>
             <p>Попробуйте изменить параметры поиска</p>
             <button @click="resetFilters" class="reset-filters-btn">Сбросить фильтры</button>
           </div>
           
           <div v-else class="loading-state">
             <div class="loading-spinner"></div>
-            <p>Загружаем рецепты...</p>
+            <p>Загружаем украшения...</p>
           </div>
 
           <!-- Пагинация -->

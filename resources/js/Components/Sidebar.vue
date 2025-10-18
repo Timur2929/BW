@@ -30,7 +30,7 @@ const logout = () => {
         <div class="sidebar-header">
             <div class="logo-container">
                 <div class="logo-icon">
-                   <a href="/"><img style="border-radius: 30%;" src="https://s3.iimg.su/s/17/g4iA3x8xoRvBT8W5zizNTZWFv2urqPtNUzXcezKt.jpg"></a>
+                   <a href="/" title="KAMENIKA"><img style="border-radius: 25%;" src="https://i.yapx.ru/a4fI0.jpg" alt="KAMENIKA"></a>
                 </div>
                 <span class="logo-text">KAMENIKA</span>
             </div>
