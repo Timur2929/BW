@@ -9,7 +9,7 @@
                         <svg class="w-8 h-8 text-blue-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                         </svg>
-                        <h2 class="text-3xl font-bold text-white">Отправить рецепт на модерацию</h2>
+                        <h2 class="text-3xl font-bold text-white">Отправить украшение на модерацию</h2>
                     </div>
 
                     <form @submit.prevent="submit" class="space-y-8">
@@ -23,12 +23,12 @@
                             </h3>
                             
                             <div>
-                                <label class="block text-sm font-medium text-gray-300 mb-1">Название рецепта</label>
+                                <label class="block text-sm font-medium text-gray-300 mb-1">Название украшения</label>
                                 <input 
                                     v-model="form.name"
                                     type="text"
                                     class="mt-1 block w-full bg-gray-600 border border-gray-500 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                    placeholder="Вкусный домашний пирог"
+                                    placeholder="Серьги с серафинитом"
                                     required
                                 />
                                 <p v-if="form.errors.name" class="mt-1 text-sm text-red-400">{{ form.errors.name }}</p>
@@ -40,7 +40,7 @@
                                     v-model="form.description"
                                     rows="4"
                                     class="mt-1 block w-full bg-gray-600 border border-gray-500 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                    placeholder="Расскажите о вашем рецепте..."
+                                    placeholder="Расскажите о вашем украшении..."
                                     required
                                 ></textarea>
                                 <p v-if="form.errors.description" class="mt-1 text-sm text-red-400">{{ form.errors.description }}</p>
@@ -52,7 +52,7 @@
                                     <input 
                                         v-model="form.cooking_time"
                                         type="text"
-                                        placeholder="например: 1 час 30 минут"
+                                        placeholder="2 дня "
                                         class="mt-1 block w-full bg-gray-600 border border-gray-500 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                         required
                                     />
@@ -76,7 +76,7 @@
                             </div>
 
                             <div>
-                                <label class="block text-sm font-medium text-gray-300 mb-1">Фото блюда</label>
+                                <label class="block text-sm font-medium text-gray-300 mb-1">Фото украшения</label>
                                 <div class="mt-2 flex items-center">
                                     <input 
                                         type="file"
@@ -120,7 +120,7 @@
                                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path>
                                     </svg>
-                                    Ингредиенты
+                                    Компоненты
                                 </h3>
                                 <button 
                                     type="button"
@@ -130,7 +130,7 @@
                                     <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                                     </svg>
-                                    Добавить ингредиент
+                                    Добавить 
                                 </button>
                             </div>
 
@@ -141,7 +141,7 @@
                                         <input 
                                             v-model="ingredient.name"
                                             type="text"
-                                            placeholder="Мука пшеничная"
+                                            placeholder="Бусы из алмазов"
                                             class="w-full bg-gray-500 border border-gray-400 rounded-md px-3 py-2 text-white placeholder-gray-300 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent"
                                             required
                                         />
@@ -151,7 +151,7 @@
                                         <input 
                                             v-model="ingredient.amount"
                                             type="text"
-                                            placeholder="200"
+                                            placeholder="2"
                                             class="w-full bg-gray-500 border border-gray-400 rounded-md px-3 py-2 text-white placeholder-gray-300 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent"
                                             required
                                         />
@@ -161,7 +161,7 @@
                                         <input 
                                             v-model="ingredient.unit"
                                             type="text"
-                                            placeholder="гр"
+                                            placeholder="шт"
                                             class="w-full bg-gray-500 border border-gray-400 rounded-md px-3 py-2 text-white placeholder-gray-300 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent"
                                             required
                                         />
@@ -391,9 +391,9 @@ const submit = () => {
         return;
     }
 
-    // Проверяем ингредиенты
+    // Проверяем Компоненты
     if (!form.ingredients.every(ing => ing.name && ing.amount && ing.unit)) {
-        alert('Пожалуйста, заполните все поля для каждого ингредиента');
+        alert('Пожалуйста, заполните все поля для каждого компоненты');
         isSubmitting.value = false;
         return;
     }

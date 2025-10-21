@@ -62,7 +62,7 @@
               <select v-model="searchType" class="filter-select">
                 <option value="all">Везде</option>
                 <option value="title">По названию</option>
-                <option value="ingredients">По ингредиентам</option>
+                <option value="ingredients">По компонентам</option>
               </select>
             </div>
             

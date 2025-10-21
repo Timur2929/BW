@@ -340,7 +340,7 @@ const sendToRevision = () => {
 
                     <div class="border-t border-gray-200">
                         <div class="p-6">
-                            <h2 class="text-2xl font-bold text-white-900 mb-6">Ингредиенты</h2>
+                            <h2 class="text-2xl font-bold text-white-900 mb-6">Компоненты</h2>
                             <ul class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <li 
                                     v-for="ingredient in recipe.ingredients" 
@@ -386,7 +386,7 @@ const sendToRevision = () => {
                         <h2 class="text-2xl font-bold mb-4">Отзывы</h2>
                         
                         <!-- Форма отзыва -->
-                        <div v-if="!hasUserReview && $page.props.auth.user" class="mb-8">
+                        <div v-if="!hasUserReview && $page.props.auth.user" class="mb-8 text-green-700">
                             <h3 class="text-lg  font-semibold mb-4">Оставить отзыв</h3>
                             <form @submit.prevent="submitReview" class="space-y-4">
                                 <div>
@@ -412,7 +412,7 @@ const sendToRevision = () => {
                                         id="comment"
                                         v-model="newReview.comment"
                                         rows="4"
-                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 text-green-700 focus:ring-blue-500"
                                         :class="{ 'border-red-500': reviewErrors.comment }"
                                     ></textarea>
                                     <p v-if="reviewErrors.comment" class="mt-1 text-sm text-red-600">{{ reviewErrors.comment }}</p>
@@ -455,7 +455,7 @@ const sendToRevision = () => {
                                         id="comment"
                                         v-model="newReview.comment"
                                         rows="4"
-                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                         :class="{ 'border-red-500': reviewErrors.comment }"
                                     ></textarea>
                                     <p v-if="reviewErrors.comment" class="mt-1 text-sm text-red-600">{{ reviewErrors.comment }}</p>
@@ -486,7 +486,7 @@ const sendToRevision = () => {
                                 <div class="flex justify-between items-start">
                                     <div>
                                         <div class="flex items-center space-x-2">
-                                            <span class="font-semibold">{{ review.user.full_name }}</span>
+                                            <span class="font-semibold text-gray-700">{{ review.user.full_name }}</span>
                                             <div class="flex">
                                                 <span v-for="star in 5" :key="star" class="text-yellow-400">
                                                     {{ star <= review.rating ? '★' : '☆' }}
@@ -546,12 +546,12 @@ const sendToRevision = () => {
         <Modal :show="showRejectModal" @close="showRejectModal = false">
             <div class="p-6">
                 <h3 class="text-lg font-medium text-gray-900 mb-4">
-                    Укажите причину отклонения рецепта
+                    Укажите причину отклонения украшения
                 </h3>
                 <div class="mb-4">
                     <textarea
                         v-model="form.rejection_reason"
-                        class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                        class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 text-gray-700 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
                         rows="4"
                         placeholder="Опишите, почему рецепт отклонен..."
                     ></textarea>
