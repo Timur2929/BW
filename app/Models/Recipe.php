@@ -29,6 +29,8 @@ class Recipe extends Model
         'status',
         'rating',
         'revision_comment',
+        'price',       // добавляем
+        'quantity',     // добавляем
         'rejection_reason',
         'approved_at',
         'rejected_at'

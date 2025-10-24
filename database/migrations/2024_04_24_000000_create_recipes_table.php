@@ -18,8 +18,11 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
             $table->integer('views')->default(0);
+            $table->decimal('price', 10, 2)->default(0); // для цены
+            $table->integer('quantity')->default(0); // для количества
             $table->decimal('rating', 3, 2)->default(0);
             $table->timestamps();
+            
         });
     }
 

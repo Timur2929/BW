@@ -31,6 +31,8 @@ const props = defineProps({
             image: null,
             rating: '0.0',
             views: 0,
+            price: 0, // добавлено
+            quantity: 0, // добавлено
             user: {
                 id: null,
                 name: '',
@@ -66,6 +68,9 @@ onMounted(() => {
     console.log('Recipe data:', props.recipe);
     console.log('Recipe status:', props.recipe.status);
     console.log('User role:', page.props.auth.user?.role);
+    
+    // Проверка наличия в корзине (можно получить из localStorage или API)
+    checkCartStatus();
 });
 
 const handleImageError = (event) => {
@@ -224,6 +229,107 @@ const sendToRevision = () => {
         }
     });
 };
+
+// Добавьте эти переменные для корзины
+const cartItems = ref([]);
+const isInCart = ref(false);
+
+// Функция проверки статуса корзины
+const checkCartStatus = () => {
+    const savedCart = localStorage.getItem('cart');
+    if (savedCart) {
+        cartItems.value = JSON.parse(savedCart);
+        isInCart.value = cartItems.value.some(item => item.id === props.recipe.id);
+    }
+};
+
+// Функция добавления в корзину
+const addToCart = () => {
+    if (!page.props.auth.user) {
+        alert('Пожалуйста, войдите в систему, чтобы добавлять товары в корзину');
+        return;
+    }
+
+    // Проверяем наличие товара
+    if (props.recipe.quantity <= 0) {
+        alert('Этот товар временно отсутствует на складе');
+        return;
+    }
+
+    const cartItem = {
+        id: props.recipe.id,
+        name: props.recipe.name,
+        image: props.recipe.image,
+        price: props.recipe.price, // добавляем цену
+        quantity: 1, // количество для корзины
+        cooking_time: props.recipe.cooking_time,
+        rating: props.recipe.rating,
+        ingredients: props.recipe.ingredients,
+        added_at: new Date().toISOString()
+    };
+
+    // Получаем текущую корзину
+    const savedCart = localStorage.getItem('cart');
+    let cartItems = savedCart ? JSON.parse(savedCart) : [];
+    
+    // Проверяем, нет ли уже этого товара в корзине
+    const existingItem = cartItems.find(item => item.id === props.recipe.id);
+    if (existingItem) {
+        alert('Этот товар уже в вашей корзине!');
+        return;
+    }
+
+    // Добавляем новый элемент
+    cartItems.push(cartItem);
+    localStorage.setItem('cart', JSON.stringify(cartItems));
+
+    // Показываем уведомление
+    alert('Товар добавлен в корзину!');
+    
+    // Можно также отправить на сервер через API
+    router.post(route('cart.add', props.recipe.id), {}, {
+        preserveScroll: true,
+        onSuccess: () => {
+            console.log('Товар добавлен в корзину на сервере');
+        },
+        onError: (errors) => {
+            console.error('Ошибка при добавлении в корзину:', errors);
+        }
+    });
+};
+
+// Функция удаления из корзины
+const removeFromCart = () => {
+    cartItems.value = cartItems.value.filter(item => item.id !== props.recipe.id);
+    isInCart.value = false;
+    localStorage.setItem('cart', JSON.stringify(cartItems.value));
+
+    router.delete(route('cart.remove', props.recipe.id), {}, {
+        preserveScroll: true
+    });
+};
+
+// Форматирование цены
+const formatPrice = (price) => {
+    return new Intl.NumberFormat('ru-RU', {
+        style: 'currency',
+        currency: 'RUB',
+        minimumFractionDigits: 0
+    }).format(price);
+};
+
+// Статус наличия товара
+const stockStatus = computed(() => {
+    if (props.recipe.quantity > 10) {
+        return { text: 'В наличии', class: 'text-green-600' };
+    } else if (props.recipe.quantity > 0) {
+        return { text: `Осталось ${props.recipe.quantity} шт.`, class: 'text-orange-600' };
+    } else {
+        return { text: 'Нет в наличии', class: 'text-red-600' };
+    }
+});
+
+
 </script>
 
 <template>
@@ -246,6 +352,23 @@ const sendToRevision = () => {
                             <div class="flex justify-between items-start mb-6">
                                 <h1 class="text-3xl font-bold text-white-900">{{ recipe.name }}</h1>
                                 <div v-if="recipe.status === 'approved'" class="flex space-x-4">
+
+                                     <!-- Кнопка корзины -->
+            <button 
+                v-if="page.props.auth.user"
+                @click="isInCart ? removeFromCart() : addToCart()" 
+                class="inline-flex items-center px-4 py-2 border rounded-md font-semibold text-xs uppercase tracking-widest transition"
+                :class="[
+                    isInCart 
+                        ? 'bg-blue-600 text-white border-transparent hover:bg-blue-700'
+                        : 'border-gray-300 text-gray-700 bg-white hover:bg-gray-50'
+                ]"
+            >
+                <span class="mr-2">{{ isInCart ? '🛒' : '➕' }}</span>
+                {{ isInCart ? 'В корзине' : 'В корзину' }}
+            </button>
+            
+
                                     <button 
                                         v-if="page.props.auth.user"
                                         @click="toggleFavorite" 
@@ -356,7 +479,7 @@ const sendToRevision = () => {
 
                     <div class="border-t border-gray-200">
                         <div class="p-6">
-                            <h2 class="text-2xl font-bold text-white-900 mb-6">Способ приготовления</h2>
+                            <h2 class="text-2xl font-bold text-white-900 mb-6">Что вам обеспечено?</h2>
                             <div class="space-y-6">
                                 <div 
                                     v-for="step in recipe.steps" 
@@ -1275,5 +1398,31 @@ const sendToRevision = () => {
 
 .text-white {
     color: #ffffff;
+}
+
+.cart-button {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    background-color: #f97316; /* orange-500 */
+    color: white;
+    border-radius: 0.375rem;
+    font-weight: 600;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: background-color 0.2s;
+}
+
+.cart-button:hover {
+    background-color: #ea580c; /* orange-600 */
+}
+
+.cart-button.in-cart {
+    background-color: #2563eb; /* blue-600 */
+}
+
+.cart-button.in-cart:hover {
+    background-color: #1d4ed8; /* blue-700 */
 }
 </style> 
