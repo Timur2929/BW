@@ -21,7 +21,7 @@
                                 </svg>
                                 Основная информация
                             </h3>
-                            
+                                
                             <div>
                                 <label class="block text-sm font-medium text-gray-300 mb-1">Название украшения</label>
                                 <input 
@@ -46,19 +46,51 @@
                                 <p v-if="form.errors.description" class="mt-1 text-sm text-red-400">{{ form.errors.description }}</p>
                             </div>
 
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-300 mb-1">Время приготовления</label>
                                     <input 
                                         v-model="form.cooking_time"
                                         type="text"
-                                        placeholder="2 дня "
+                                        placeholder="2 дня"
                                         class="mt-1 block w-full bg-gray-600 border border-gray-500 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                         required
                                     />
                                     <p v-if="form.errors.cooking_time" class="mt-1 text-sm text-red-400">{{ form.errors.cooking_time }}</p>
                                 </div>
 
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-300 mb-1">Количество (quantity)</label>
+                                    <input 
+                                        v-model="form.quantity"
+                                        type="number"
+                                        min="1"
+                                        placeholder="1"
+                                        class="mt-1 block w-full bg-gray-600 border border-gray-500 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                        required
+                                    />
+                                    <p v-if="form.errors.quantity" class="mt-1 text-sm text-red-400">{{ form.errors.quantity }}</p>
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-300 mb-1">Цена (price)</label>
+                                    <div class="relative">
+                                        <input 
+                                            v-model="form.price"
+                                            type="number"
+                                            min="0"
+                                            step="0.01"
+                                            placeholder="0.00"
+                                            class="mt-1 block w-full bg-gray-600 border border-gray-500 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent pr-10"
+                                            required
+                                        />
+                                        <span class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400">₽</span>
+                                    </div>
+                                    <p v-if="form.errors.price" class="mt-1 text-sm text-red-400">{{ form.errors.price }}</p>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-300 mb-1">Категория</label>
                                     <select 
@@ -310,6 +342,8 @@ const form = useForm({
     description: '',
     cooking_time: '',
     category_id: '',
+    quantity: 1,
+    price: '',
     image: null,
     ingredients: [{ name: '', amount: '', unit: '' }],
     steps: [{ description: '', order: 1 }],
@@ -387,6 +421,19 @@ const submit = () => {
 
     if (!form.category_id) {
         alert('Пожалуйста, выберите категорию');
+        isSubmitting.value = false;
+        return;
+    }
+
+    // Проверяем количество и цену
+    if (!form.quantity || form.quantity < 1) {
+        alert('Пожалуйста, укажите корректное количество');
+        isSubmitting.value = false;
+        return;
+    }
+
+    if (!form.price || form.price < 0) {
+        alert('Пожалуйста, укажите корректную цену');
         isSubmitting.value = false;
         return;
     }

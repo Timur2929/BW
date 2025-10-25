@@ -243,7 +243,6 @@ const checkCartStatus = () => {
     }
 };
 
-// Функция добавления в корзину
 const addToCart = () => {
     if (!page.props.auth.user) {
         alert('Пожалуйста, войдите в систему, чтобы добавлять товары в корзину');
@@ -259,9 +258,12 @@ const addToCart = () => {
     const cartItem = {
         id: props.recipe.id,
         name: props.recipe.name,
+        description: props.recipe.description,
         image: props.recipe.image,
-        price: props.recipe.price, // добавляем цену
-        quantity: 1, // количество для корзины
+        price: props.recipe.price,
+        quantity: props.recipe.quantity, // общее количество на складе
+        maxQuantity: props.recipe.quantity, // максимальное доступное количество
+        cartQuantity: 1, // количество в корзине
         cooking_time: props.recipe.cooking_time,
         rating: props.recipe.rating,
         ingredients: props.recipe.ingredients,
@@ -273,9 +275,16 @@ const addToCart = () => {
     let cartItems = savedCart ? JSON.parse(savedCart) : [];
     
     // Проверяем, нет ли уже этого товара в корзине
-    const existingItem = cartItems.find(item => item.id === props.recipe.id);
-    if (existingItem) {
-        alert('Этот товар уже в вашей корзине!');
+    const existingItemIndex = cartItems.findIndex(item => item.id === props.recipe.id);
+    if (existingItemIndex !== -1) {
+        // Если товар уже в корзине, увеличиваем количество
+        if (cartItems[existingItemIndex].cartQuantity < cartItems[existingItemIndex].maxQuantity) {
+            cartItems[existingItemIndex].cartQuantity++;
+            localStorage.setItem('cart', JSON.stringify(cartItems));
+            alert('Количество товара увеличено в корзине!');
+        } else {
+            alert('Достигнуто максимальное доступное количество этого товара!');
+        }
         return;
     }
 
@@ -285,17 +294,6 @@ const addToCart = () => {
 
     // Показываем уведомление
     alert('Товар добавлен в корзину!');
-    
-    // Можно также отправить на сервер через API
-    router.post(route('cart.add', props.recipe.id), {}, {
-        preserveScroll: true,
-        onSuccess: () => {
-            console.log('Товар добавлен в корзину на сервере');
-        },
-        onError: (errors) => {
-            console.error('Ошибка при добавлении в корзину:', errors);
-        }
-    });
 };
 
 // Функция удаления из корзины
@@ -352,22 +350,22 @@ const stockStatus = computed(() => {
                             <div class="flex justify-between items-start mb-6">
                                 <h1 class="text-3xl font-bold text-white-900">{{ recipe.name }}</h1>
                                 <div v-if="recipe.status === 'approved'" class="flex space-x-4">
-
-                                     <!-- Кнопка корзины -->
-            <button 
-                v-if="page.props.auth.user"
-                @click="isInCart ? removeFromCart() : addToCart()" 
-                class="inline-flex items-center px-4 py-2 border rounded-md font-semibold text-xs uppercase tracking-widest transition"
-                :class="[
-                    isInCart 
-                        ? 'bg-blue-600 text-white border-transparent hover:bg-blue-700'
-                        : 'border-gray-300 text-gray-700 bg-white hover:bg-gray-50'
-                ]"
-            >
-                <span class="mr-2">{{ isInCart ? '🛒' : '➕' }}</span>
-                {{ isInCart ? 'В корзине' : 'В корзину' }}
-            </button>
-            
+<!-- Кнопка корзины -->
+    <button 
+        v-if="page.props.auth.user && recipe.quantity > 0"
+        @click="isInCart ? removeFromCart() : addToCart()" 
+        class="inline-flex items-center px-4 py-2 border rounded-md font-semibold text-xs uppercase tracking-widest transition"
+        :class="[
+            isInCart 
+                ? 'bg-blue-600 text-white border-transparent hover:bg-blue-700'
+                : 'border-gray-300 text-gray-700 bg-white hover:bg-gray-50'
+        ]"
+        :disabled="recipe.quantity === 0"
+    >
+        <span class="mr-2">{{ isInCart ? '🛒' : '➕' }}</span>
+        {{ isInCart ? 'В корзине' : (recipe.quantity > 0 ? 'В корзину' : 'Нет в наличии') }}
+    </button>
+    
 
                                     <button 
                                         v-if="page.props.auth.user"
@@ -390,6 +388,19 @@ const stockStatus = computed(() => {
                                     <span class="text-gray-400 mr-2">⏱</span>
                                     <span class="text-white-600">{{ recipe.cooking_time }}</span>
                                 </div>
+
+                                 <!-- Добавленные поля для количества и цены -->
+    <div class="flex items-center">
+        <span class="text-gray-400 mr-2">📦</span>
+        <span class="text-white-600">{{ recipe.quantity }} шт.</span>
+    </div>
+    
+    <div class="flex items-center">
+        <span class="text-gray-400 mr-2">💰</span>
+        <span class="text-white-600">{{ formatPrice(recipe.price) }}</span>
+    </div>
+    <!-- Конец добавленных полей -->
+
                                 <div class="flex items-center">
                                     <div class="flex text-yellow-400 mr-2">
                                         <span v-for="n in 5" :key="n" :class="{ 'text-gray-300': n > (recipe.rating || 0) }">★</span>
@@ -416,6 +427,15 @@ const stockStatus = computed(() => {
                             </div>
 
                             <p class="text-white-600 mb-6">{{ recipe.description }}</p>
+
+                            <!-- Статус наличия товара -->
+<div class="mb-6">
+    <div class="inline-flex items-center px-3 py-2 rounded-lg text-sm font-medium" 
+         :class="stockStatus.class">
+        <span class="mr-2">📦</span>
+        {{ stockStatus.text }}
+    </div>
+</div>
 
                             <!-- Комментарий администратора для статусов 'revision' и 'rejected' -->
                             <div v-if="recipe.status === 'revision' && recipe.revision_comment" class="mb-6 p-4 rounded-lg bg-yellow-50 border-l-4 border-yellow-400 flex items-start">

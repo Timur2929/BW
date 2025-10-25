@@ -38,6 +38,8 @@ class Recipe extends Model
 
     protected $attributes = [
         'status' => self::STATUS_PENDING,
+        'price' => 'decimal:2',
+        'quantity' => 'integer',
         'rating' => 0,
         'views' => 0
     ];

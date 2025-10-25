@@ -19,8 +19,8 @@ class RecipeSeeder extends Seeder
                 'cooking_time' => '2 дня',
                 'image' => 'images/recipes/sumerki.jpg',
                 'status' => Recipe::STATUS_APPROVED,
-                'price' => 2500, // цена в рублях
-                'quantity' => 7, // количество в наличии
+                'price' => 2500.00, // цена в рублях
+                'quantity' => 12, // количество в наличии
                 'ingredients' => [
                     ['name' => 'Кахалонг', 'amount' => '1', 'unit' => 'шт'],
                     ['name' => 'Ювелирная цепочка', 'amount' => '2', 'unit' => 'шт'],
@@ -38,7 +38,7 @@ class RecipeSeeder extends Seeder
                 'cooking_time' => '1 день',
                 'image' => 'images/recipes/ame.jpg',
                 'status' => Recipe::STATUS_APPROVED,
-                'price' => 3000,
+                'price' => 3000.00,
                 'quantity' => 8,
                 'ingredients' => [
                     ['name' => 'Латунь', 'amount' => '3', 'unit' => 'шт'],
@@ -58,7 +58,7 @@ class RecipeSeeder extends Seeder
                 'cooking_time' => '1 день',
                 'image' => 'images/recipes/dobr.jpg',
                 'status' => Recipe::STATUS_APPROVED,
-                'price' => 3200,
+                'price' => 3200.00,
                 'quantity' => 6,
                 'ingredients' => [
                     ['name' => 'Нефрит', 'amount' => '1', 'unit' => 'шт'],

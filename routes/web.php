@@ -58,6 +58,7 @@ Route::get('/cart', function () {
     return Inertia::render('Cart/Index');
 })->name('cart.index');
 
+
     // Статьи
     Route::get('/articles/create', [ArticleController::class, 'create'])->name('articles.create');
     Route::post('/articles', [ArticleController::class, 'store'])->name('articles.store');

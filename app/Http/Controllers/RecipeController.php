@@ -60,6 +60,8 @@ class RecipeController extends Controller
                     : asset('/images/placeholder.png'),
                 'rating' => $recipe->rating,
                 'views' => $recipe->views,
+                'price' => $recipe->price, // ДОБАВЬ ЭТУ СТРОЧКУ
+                'quantity' => $recipe->quantity, // ДОБАВЬ ЭТУ СТРОЧКУ
                 'user' => [
                     'id' => $recipe->user->id,
                     'full_name' => $recipe->user->full_name,
@@ -108,6 +110,8 @@ class RecipeController extends Controller
         //     'description' => 'required|string',
         //     'category_id' => 'required|exists:categories,id',
         //     'cooking_time' => 'required|string',
+        //     'price' => 'required|numeric|min:0', // ДОБАВЬ ВАЛИДАЦИЮ
+        //     'quantity' => 'required|integer|min:0', // ДОБАВЬ ВАЛИДАЦИЮ
         //     'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         //     'ingredients' => 'required|array|min:1',
         //     'ingredients.*.name' => 'required|string|max:255',
@@ -131,6 +135,8 @@ class RecipeController extends Controller
             $recipe->description = $validated['description'];
             $recipe->category_id = $validated['category_id'];
             $recipe->cooking_time = $validated['cooking_time'];
+            $recipe->price = $validated['price']; // ДОБАВЬ ЭТУ СТРОЧКУ
+        $recipe->quantity = $validated['quantity']; // ДОБАВЬ ЭТУ СТРОЧКУ
             $recipe->user_id = auth()->id();
             $recipe->status = Recipe::STATUS_PENDING;
             
@@ -277,6 +283,8 @@ class RecipeController extends Controller
                 'status' => $recipe->status,
                 'rejection_reason' => $recipe->rejection_reason,
                 'revision_comment' => $recipe->revision_comment,
+                'price' => $recipe->price, // ДОБАВЬ ЭТУ СТРОЧКУ
+                'quantity' => $recipe->quantity, // ДОБАВЬ ЭТУ СТРОЧКУ
                 'user' => [
                     'id' => $recipe->user->id,
                     'full_name' => $recipe->user->full_name,
