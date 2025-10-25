@@ -1,5 +1,5 @@
 <template>
-  <Head title="Рецепты" />
+  <Head title="Украшения" />
   
   <AppLayout>
     <div class="dark-theme">
