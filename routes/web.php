@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RecipeController;
@@ -57,7 +60,9 @@ Route::middleware('auth')->group(function () {
 Route::get('/cart', function () {
     return Inertia::render('Cart/Index');
 })->name('cart.index');
-
+Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
+Route::get('/orders/success/{orderNumber}', [OrderController::class, 'success'])->name('orders.success');
 
     // Статьи
     Route::get('/articles/create', [ArticleController::class, 'create'])->name('articles.create');

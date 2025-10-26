@@ -160,14 +160,13 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <!-- Кнопка оформления заказа -->
-                            <button 
-                                @click="showCheckoutForm = true"
-                                class="w-full mt-6 bg-gray-600 text-white py-3 px-4 rounded-lg hover:bg-green-700 transition-colors font-semibold"
-                            >
-                                Перейти к оформлению
-                            </button>
+<!-- Замените старую кнопку на эту -->
+<Link 
+    :href="route('checkout.index')"
+    class="w-full mt-6 bg-green-600 text-white py-3 px-4 rounded-lg hover:bg-green-700 transition-colors font-semibold text-center block"
+>
+    Перейти к оформлению
+</Link>
                         </div>
 
                         <!-- Гарантии -->
@@ -199,149 +198,7 @@
             </div>
         </div>
 
-        <!-- Модальное окно оформления заказа -->
-        <Modal :show="showCheckoutForm" @close="showCheckoutForm = false" max-width="2xl">
-            <div class="p-6">
-                <h3 class="text-xl font-semibold text-gray-900 mb-6">Оформление заказа</h3>
-                
-                <form @submit.prevent="submitOrder" class="space-y-6">
-                    <!-- Контактная информация -->
-                    <div>
-                        <h4 class="text-lg font-medium text-gray-900 mb-4">Контактная информация</h4>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Имя *</label>
-                                <input 
-                                    v-model="orderForm.first_name"
-                                    type="text"
-                                    required
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 text-green-700 focus:ring-green-500 focus:border-green-500"
-                                    placeholder="Ваше имя"
-                                />
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Фамилия *</label>
-                                <input 
-                                    v-model="orderForm.last_name"
-                                    type="text"
-                                    required
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 text-green-700 focus:ring-green-500 focus:border-green-500"
-                                    placeholder="Ваша фамилия"
-                                />
-                            </div>
-                            <div class="md:col-span-2">
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Email *</label>
-                                <input 
-                                    v-model="orderForm.email"
-                                    type="email"
-                                    required
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 text-green-700 focus:ring-green-500 focus:border-green-500"
-                                    placeholder="your@email.com"
-                                />
-                            </div>
-                            <div class="md:col-span-2">
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Телефон *</label>
-                                <input 
-                                    v-model="orderForm.phone"
-                                    type="tel"
-                                    required
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 text-green-700 focus:ring-green-500 focus:border-green-500"
-                                    placeholder="+7 (XXX) XXX-XX-XX"
-                                />
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Адрес доставки -->
-                    <div>
-                        <h4 class="text-lg font-medium text-gray-900 mb-4">Адрес доставки</h4>
-                        <div class="space-y-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Город *</label>
-                                <input 
-                                    v-model="orderForm.city"
-                                    type="text"
-                                    required
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 text-green-700 focus:ring-green-500 focus:border-green-500"
-                                    placeholder="Город доставки"
-                                />
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Адрес *</label>
-                                <input 
-                                    v-model="orderForm.address"
-                                    type="text"
-                                    required
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 text-green-700 focus:ring-green-500 focus:border-green-500"
-                                    placeholder="Улица, дом, квартира"
-                                />
-                            </div>
-                            <div class="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Индекс</label>
-                                    <input 
-                                        v-model="orderForm.postal_code"
-                                        type="text"
-                                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 text-green-700 focus:ring-green-500 focus:border-green-500"
-                                        placeholder="Почтовый индекс"
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Комментарий -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Комментарий к заказу</label>
-                        <textarea 
-                            v-model="orderForm.comment"
-                            rows="3"
-                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 text-green-700 focus:ring-green-500 focus:border-green-500"
-                            placeholder="Дополнительные пожелания..."
-                        ></textarea>
-                    </div>
-
-                    <!-- Итоги заказа -->
-                    <div class="bg-gray-50 rounded-lg p-4">
-                        <h4 class="font-semibold text-gray-900 mb-3">Итоги заказа</h4>
-                        <div class="space-y-2 text-sm">
-                            <div class="flex justify-between">
-                                <span>Товары:</span>
-                                <span>{{ formatPrice(subtotal) }}</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span>Доставка:</span>
-                                <span>{{ deliveryPrice === 0 ? 'Бесплатно' : formatPrice(deliveryPrice) }}</span>
-                            </div>
-                            <div class="border-t border-gray-200 pt-2">
-                                <div class="flex justify-between font-semibold">
-                                    <span>Итого:</span>
-                                    <span class="text-gray-600">{{ formatPrice(total) }}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Кнопки -->
-                    <div class="flex justify-end space-x-4">
-                        <button
-                            type="button"
-                            @click="showCheckoutForm = false"
-                            class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
-                        >
-                            Отмена
-                        </button>
-                        <button
-                            type="submit"
-                            :disabled="isSubmitting"
-                            class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                            {{ isSubmitting ? 'Оформление...' : 'Оформить заказ' }}
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </Modal>
+      
     </AppLayout>
 </template>
 

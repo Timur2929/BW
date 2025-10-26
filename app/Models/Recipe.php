@@ -18,7 +18,7 @@ class Recipe extends Model
     const STATUS_REVISION = 'revision';
 
     protected $fillable = [
-        'title',
+        'name',
         'description',
         'ingredients',
         'instructions',
