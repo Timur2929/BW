@@ -24,6 +24,11 @@ class Order extends Model
         'total',
         'total_items',
         'status',
+        'cancelled_at', // добавьте это
+    ];
+
+      protected $casts = [
+        'cancelled_at' => 'datetime',
     ];
 
     protected static function boot()
@@ -43,5 +48,10 @@ class Order extends Model
     public function items(): HasMany
     {
         return $this->hasMany(OrderItem::class);
+    }
+     // Добавьте метод для проверки возможности отмены
+    public function canBeCancelled(): bool
+    {
+        return in_array($this->status, ['pending', 'processing']) && !$this->cancelled_at;
     }
 }

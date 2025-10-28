@@ -1,5 +1,6 @@
 <?php
 
+
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\OrderController;
@@ -15,6 +16,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Models\Category;
+
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -63,6 +65,10 @@ Route::get('/cart', function () {
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
 Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
 Route::get('/orders/success/{orderNumber}', [OrderController::class, 'success'])->name('orders.success');
+// Добавьте этот маршрут
+Route::post('/orders/{order}/cancel', [OrderController::class, 'cancel'])
+    ->name('orders.cancel')
+    ->middleware('auth');
 
     // Статьи
     Route::get('/articles/create', [ArticleController::class, 'create'])->name('articles.create');
@@ -113,6 +119,14 @@ Route::middleware(['auth', \App\Http\Middleware\AdminMiddleware::class])->group(
     Route::post('/admin/recipes/{recipe}/reject', [\App\Http\Controllers\Admin\RecipeController::class, 'reject'])->name('admin.recipes.reject');
     Route::post('/admin/recipes/{recipe}/revision', [\App\Http\Controllers\Admin\RecipeController::class, 'revision'])->name('admin.recipes.revision');
 });
-
+// // Admin Order Routes
+// Route::middleware(['auth', \App\Http\Middleware\AdminMiddleware::class])->group(function () {
+//     Route::get('/admin/orders', [Admin\OrderController::class, 'index'])->name('admin.orders.index');
+//     Route::get('/admin/orders/statistics', [Admin\OrderController::class, 'statistics'])->name('admin.orders.statistics');
+//     Route::get('/admin/orders/{order}', [Admin\OrderController::class, 'show'])->name('admin.orders.show');
+//     Route::put('/admin/orders/{order}/status', [Admin\OrderController::class, 'updateStatus'])->name('admin.orders.updateStatus');
+//     Route::put('/admin/orders/{order}', [Admin\OrderController::class, 'update'])->name('admin.orders.update');
+//     Route::delete('/admin/orders/{order}', [Admin\OrderController::class, 'destroy'])->name('admin.orders.destroy');
+// });
 
 require __DIR__.'/auth.php';

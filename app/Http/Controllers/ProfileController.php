@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
 use App\Models\Recipe;
+use App\Models\Order;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 use App\Models\User;
@@ -33,6 +34,49 @@ class ProfileController extends Controller
             ? Storage::url($user->cover_image) 
             : '/storage/images/profile/default-cover.jpg';
         
+        // Получаем заказы пользователя с элементами и рецептами
+        $orders = Order::where('user_id', $user->id)
+            ->with(['items.recipe.category'])
+            ->orderBy('created_at', 'desc')
+            ->get()
+            ->map(function ($order) {
+                return [
+                    'id' => $order->id,
+                    'order_number' => $order->order_number,
+                    'first_name' => $order->first_name,
+                    'last_name' => $order->last_name,
+                    'email' => $order->email,
+                    'phone' => $order->phone,
+                    'city' => $order->city,
+                    'address' => $order->address,
+                    'postal_code' => $order->postal_code,
+                    'comment' => $order->comment,
+                    'subtotal' => $order->subtotal,
+                    'delivery_price' => $order->delivery_price,
+                    'total' => $order->total,
+                    'total_items' => $order->total_items,
+                    'status' => $order->status,
+                    'created_at' => $order->created_at,
+                    'items' => $order->items->map(function ($item) {
+                        return [
+                            'id' => $item->id,
+                            'name' => $item->name,
+                            'price' => $item->price,
+                            'quantity' => $item->quantity,
+                            'image' => $item->image ? Storage::url($item->image) : null,
+                            'recipe' => $item->recipe ? [
+                                'id' => $item->recipe->id,
+                                'name' => $item->recipe->name,
+                                'image' => $item->recipe->image ? Storage::url($item->recipe->image) : '/storage/recipes/placeholder.jpg',
+                                'category' => $item->recipe->category ? [
+                                    'name' => $item->recipe->category->name
+                                ] : null
+                            ] : null
+                        ];
+                    })
+                ];
+            });
+
         $data = [
             'user' => [
                 'id' => $user->id,
@@ -44,22 +88,40 @@ class ProfileController extends Controller
                 'avatar_url' => $avatarUrl,
                 'cover_image' => $coverUrl
             ],
-            'pendingRecipes' => []
+            'pendingRecipes' => [],
+            'orders' => $orders
         ];
 
-        // Для обычного пользователя — все его рецепты
-        $data['user']['recipes'] = $user->recipes()->with('category')->orderByDesc('created_at')->get()->map(function ($recipe) {
+        // Для обычного пользователя — все его рецепты с дополнительной информацией
+        $data['user']['recipes'] = $user->recipes()->with('category')->orderByDesc('created_at')->get()->map(function ($recipe) use ($orders) {
+            // Подсчитываем количество продаж для этого рецепта
+            $salesCount = 0;
+            foreach ($orders as $order) {
+                foreach ($order['items'] as $item) {
+                    if ($item['recipe'] && $item['recipe']['id'] === $recipe->id) {
+                        $salesCount += $item['quantity'];
+                    }
+                }
+            }
+
             return [
                 'id' => $recipe->id,
-                'title' => $recipe->name,
+                'name' => $recipe->name,
+                'title' => $recipe->name, // для обратной совместимости
                 'description' => $recipe->description,
                 'cooking_time' => $recipe->cooking_time,
                 'image' => $recipe->image ? Storage::url($recipe->image) : '/storage/recipes/placeholder.jpg',
                 'status' => $recipe->status,
-                'category' => $recipe->category ? $recipe->category->name : null,
+                'category' => $recipe->category ? [
+                    'id' => $recipe->category->id,
+                    'name' => $recipe->category->name
+                ] : null,
                 'rejection_reason' => $recipe->rejection_reason,
                 'revision_comment' => $recipe->revision_comment,
                 'rating' => number_format($recipe->rating, 1),
+                'price' => $recipe->price,
+                'quantity' => $recipe->quantity,
+                'sales_count' => $salesCount
             ];
         });
 
@@ -99,10 +161,29 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): Response
     {
+        $user = $request->user();
+        
+        // Получаем URL'ы для изображений для формы редактирования
+        $avatarUrl = $user->avatar 
+            ? Storage::url($user->avatar) 
+            : '/storage/images/profile/default-avatar.png';
+            
+        $coverUrl = $user->cover_image 
+            ? Storage::url($user->cover_image) 
+            : '/storage/images/profile/default-cover.jpg';
+
         return Inertia::render('Profile/Edit', [
             'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
             'status' => session('status'),
-            'user' => $request->user()
+            'user' => [
+                'id' => $user->id,
+                'first_name' => $user->first_name,
+                'last_name' => $user->last_name,
+                'email' => $user->email,
+                'phone' => $user->phone,
+                'avatar_url' => $avatarUrl,
+                'cover_image' => $coverUrl
+            ]
         ]);
     }
 

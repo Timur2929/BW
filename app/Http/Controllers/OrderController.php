@@ -108,4 +108,49 @@ class OrderController extends Controller
         ]);
     }
 }
+// Добавьте этот метод в ваш OrderController
+public function cancel(Request $request, Order $order)
+{
+    // Проверяем, что пользователь может отменить только свои заказы
+    if ($order->user_id !== auth()->id()) {
+        abort(403, 'Unauthorized');
+    }
+
+    // Проверяем, что заказ можно отменить (только pending или processing)
+    if (!in_array($order->status, ['pending', 'processing'])) {
+        return back()->withErrors([
+            'error' => 'Невозможно отменить заказ с текущим статусом'
+        ]);
+    }
+
+    try {
+        DB::beginTransaction();
+
+        // Возвращаем товары на склад
+        foreach ($order->items as $item) {
+            if ($item->recipe) {
+                $item->recipe->increment('quantity', $item->quantity);
+            }
+        }
+
+        // Обновляем статус заказа
+        $order->update([
+            'status' => 'cancelled',
+            'cancelled_at' => now()
+        ]);
+
+        DB::commit();
+
+        return back()->with('success', 'Заказ успешно отменен');
+
+    } catch (\Exception $e) {
+        DB::rollBack();
+        
+        \Log::error('Order cancellation failed: ' . $e->getMessage());
+        
+        return back()->withErrors([
+            'error' => 'Произошла ошибка при отмене заказа'
+        ]);
+    }
+}
 }
