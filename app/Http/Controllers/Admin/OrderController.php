@@ -16,34 +16,36 @@ class OrderController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Order::with(['user', 'items.recipe'])
-            ->orderBy('created_at', 'desc');
+        $query = Order::with(['user', 'items'])
+            ->latest();
 
         // Фильтрация по статусу
         if ($request->has('status') && $request->status !== 'all') {
             $query->where('status', $request->status);
         }
 
-        // Поиск по номеру заказа
+        // Поиск по номеру заказа, email или имени
         if ($request->has('search')) {
-            $query->where('order_number', 'like', '%' . $request->search . '%');
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('order_number', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhere('first_name', 'like', "%{$search}%")
+                  ->orWhere('last_name', 'like', "%{$search}%");
+            });
         }
 
-        $orders = $query->paginate(15);
+        $orders = $query->paginate(20);
 
         return Inertia::render('Admin/Orders/Index', [
             'orders' => $orders,
-            'filters' => [
-                'status' => $request->status ?? 'all',
-                'search' => $request->search ?? '',
-            ],
-            'statusOptions' => [
-                'all' => 'Все заказы',
-                'pending' => 'Ожидает подтверждения',
+            'filters' => $request->only(['search', 'status']),
+            'statuses' => [
+                'pending' => 'Ожидание',
                 'processing' => 'В обработке',
+                'completed' => 'Завершен',
+                'cancelled' => 'Отменен',
                 'shipped' => 'Отправлен',
-                'delivered' => 'Доставлен',
-                'cancelled' => 'Отменён',
             ]
         ]);
     }
@@ -53,10 +55,17 @@ class OrderController extends Controller
      */
     public function show(Order $order)
     {
-        $order->load(['user', 'items.recipe.category']);
+        $order->load(['user', 'items.recipe']);
 
         return Inertia::render('Admin/Orders/Show', [
-            'order' => $order
+            'order' => $order,
+            'statuses' => [
+                'pending' => 'Ожидание',
+                'processing' => 'В обработке',
+                'completed' => 'Завершен',
+                'cancelled' => 'Отменен',
+                'shipped' => 'Отправлен',
+            ]
         ]);
     }
 
@@ -66,7 +75,7 @@ class OrderController extends Controller
     public function updateStatus(Request $request, Order $order)
     {
         $request->validate([
-            'status' => 'required|in:pending,processing,shipped,delivered,cancelled'
+            'status' => 'required|in:pending,processing,completed,cancelled,shipped'
         ]);
 
         try {
@@ -85,31 +94,32 @@ class OrderController extends Controller
                 $order->cancelled_at = now();
             }
 
-            // Если заказ был отменен, но теперь активируется - убираем товары со склада
-            if ($oldStatus === 'cancelled' && $newStatus !== 'cancelled') {
+            // Если заказ был отменен, но теперь активируется - снова уменьшаем количество
+            if ($oldStatus === 'cancelled' && !in_array($newStatus, ['cancelled'])) {
                 foreach ($order->items as $item) {
                     if ($item->recipe && $item->recipe->quantity >= $item->quantity) {
                         $item->recipe->decrement('quantity', $item->quantity);
                     } else {
-                        throw new \Exception("Недостаточно товара: {$item->recipe->name}");
+                        throw new \Exception("Недостаточно товара: {$item->name}");
                     }
                 }
                 $order->cancelled_at = null;
             }
 
-            $order->update([
-                'status' => $newStatus
-            ]);
+            $order->status = $newStatus;
+            $order->save();
 
             DB::commit();
 
-            return redirect()->back()->with('success', 'Статус заказа успешно обновлен');
+            return back()->with('success', 'Статус заказа успешно обновлен');
 
         } catch (\Exception $e) {
             DB::rollBack();
             
-            return redirect()->back()->withErrors([
-                'error' => 'Ошибка при обновлении статуса: ' . $e->getMessage()
+            \Log::error('Order status update failed: ' . $e->getMessage());
+            
+            return back()->withErrors([
+                'error' => 'Произошла ошибка при обновлении статуса: ' . $e->getMessage()
             ]);
         }
     }
@@ -128,39 +138,86 @@ class OrderController extends Controller
             'address' => 'required|string|max:500',
             'postal_code' => 'nullable|string|max:20',
             'comment' => 'nullable|string|max:1000',
+            'delivery_price' => 'required|numeric|min:0',
         ]);
 
-        $order->update($validated);
+        try {
+            $order->update($validated);
 
-        return redirect()->back()->with('success', 'Информация о заказе успешно обновлена');
+            // Пересчитываем итоговую сумму
+            $order->total = $order->subtotal + $order->delivery_price;
+            $order->save();
+
+            return back()->with('success', 'Данные заказа успешно обновлены');
+
+        } catch (\Exception $e) {
+            \Log::error('Order update failed: ' . $e->getMessage());
+            
+            return back()->withErrors([
+                'error' => 'Произошла ошибка при обновлении заказа'
+            ]);
+        }
     }
 
     /**
-     * Remove the specified order.
+     * Cancel order (admin version).
      */
-    public function destroy(Order $order)
+    public function cancel(Order $order)
     {
         try {
             DB::beginTransaction();
 
-            // Возвращаем товары на склад перед удалением
+            // Возвращаем товары на склад
             foreach ($order->items as $item) {
                 if ($item->recipe) {
                     $item->recipe->increment('quantity', $item->quantity);
                 }
             }
 
-            $order->delete();
+            // Обновляем статус заказа
+            $order->update([
+                'status' => 'cancelled',
+                'cancelled_at' => now()
+            ]);
 
             DB::commit();
 
-            return redirect()->route('admin.orders.index')->with('success', 'Заказ успешно удален');
+            return back()->with('success', 'Заказ успешно отменен');
 
         } catch (\Exception $e) {
             DB::rollBack();
             
-            return redirect()->back()->withErrors([
-                'error' => 'Ошибка при удалении заказа: ' . $e->getMessage()
+            \Log::error('Admin order cancellation failed: ' . $e->getMessage());
+            
+            return back()->withErrors([
+                'error' => 'Произошла ошибка при отмене заказа'
+            ]);
+        }
+    }
+
+    /**
+     * Delete order.
+     */
+    public function destroy(Order $order)
+    {
+        try {
+            // Можно удалять только отмененные заказы
+            if ($order->status !== 'cancelled') {
+                return back()->withErrors([
+                    'error' => 'Можно удалять только отмененные заказы'
+                ]);
+            }
+
+            $order->delete();
+
+            return redirect()->route('admin.orders.index')
+                ->with('success', 'Заказ успешно удален');
+
+        } catch (\Exception $e) {
+            \Log::error('Order deletion failed: ' . $e->getMessage());
+            
+            return back()->withErrors([
+                'error' => 'Произошла ошибка при удалении заказа'
             ]);
         }
     }
@@ -174,14 +231,12 @@ class OrderController extends Controller
             'total' => Order::count(),
             'pending' => Order::where('status', 'pending')->count(),
             'processing' => Order::where('status', 'processing')->count(),
-            'shipped' => Order::where('status', 'shipped')->count(),
-            'delivered' => Order::where('status', 'delivered')->count(),
+            'completed' => Order::where('status', 'completed')->count(),
             'cancelled' => Order::where('status', 'cancelled')->count(),
-            'revenue' => Order::where('status', 'delivered')->sum('total'),
+            'today' => Order::whereDate('created_at', today())->count(),
+            'revenue' => Order::where('status', 'completed')->sum('total'),
         ];
 
-        return Inertia::render('Admin/Orders/Statistics', [
-            'stats' => $stats
-        ]);
+        return response()->json($stats);
     }
 }

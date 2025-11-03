@@ -22,7 +22,7 @@
       <div class="status-update-form">
         <h4 class="form-title">Изменить статус</h4>
         
-        <form @submit.prevent="updateStatus" class="form-grid">
+        <form @submit.prevent="updateStatus" class="form-grid text-gray-600">
           <select v-model="newStatus" class="status-select" :disabled="updating">
             <option value="pending">Ожидает подтверждения</option>
             <option value="processing">В обработке</option>

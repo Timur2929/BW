@@ -58,14 +58,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/recipes/{recipe}/edit', [RecipeController::class, 'edit'])->name('recipes.edit');
     Route::put('/recipes/{recipe}', [RecipeController::class, 'update'])->name('recipes.update');
 
-// Добавьте этот маршрут
+
 Route::get('/cart', function () {
     return Inertia::render('Cart/Index');
 })->name('cart.index');
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
 Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
 Route::get('/orders/success/{orderNumber}', [OrderController::class, 'success'])->name('orders.success');
-// Добавьте этот маршрут
+
 Route::post('/orders/{order}/cancel', [OrderController::class, 'cancel'])
     ->name('orders.cancel')
     ->middleware('auth');
@@ -114,6 +114,14 @@ Route::middleware(['auth', \App\Http\Middleware\AdminMiddleware::class])->group(
     Route::get('/admin/articles/{article}/edit', [\App\Http\Controllers\Admin\ArticleController::class, 'edit'])->name('admin.articles.edit');
     Route::put('/admin/articles/{article}', [\App\Http\Controllers\Admin\ArticleController::class, 'update'])->name('admin.articles.update');
 
+    // Админ-маршруты для мониторинга заказов, также есть отдельный файл admin.php
+    Route::get('/admin/orders', [Admin\OrderController::class, 'index'])->name('admin.orders.index');
+    Route::get('/admin/orders/statistics', [Admin\OrderController::class, 'statistics'])->name('admin.orders.statistics');
+    Route::get('/admin/orders/{order}', [Admin\OrderController::class, 'show'])->name('admin.orders.show');
+    Route::put('/admin/orders/{order}/status', [Admin\OrderController::class, 'updateStatus'])->name('admin.orders.updateStatus');
+    Route::put('/admin/orders/{order}', [Admin\OrderController::class, 'update'])->name('admin.orders.update');
+    Route::delete('/admin/orders/{order}', [Admin\OrderController::class, 'destroy'])->name('admin.orders.destroy');
+
     // Маршруты для модерации рецептов
     Route::post('/admin/recipes/{recipe}/approve', [\App\Http\Controllers\Admin\RecipeController::class, 'approve'])->name('admin.recipes.approve');
     Route::post('/admin/recipes/{recipe}/reject', [\App\Http\Controllers\Admin\RecipeController::class, 'reject'])->name('admin.recipes.reject');
@@ -121,12 +129,8 @@ Route::middleware(['auth', \App\Http\Middleware\AdminMiddleware::class])->group(
 });
 // // Admin Order Routes
 // Route::middleware(['auth', \App\Http\Middleware\AdminMiddleware::class])->group(function () {
-//     Route::get('/admin/orders', [Admin\OrderController::class, 'index'])->name('admin.orders.index');
-//     Route::get('/admin/orders/statistics', [Admin\OrderController::class, 'statistics'])->name('admin.orders.statistics');
-//     Route::get('/admin/orders/{order}', [Admin\OrderController::class, 'show'])->name('admin.orders.show');
-//     Route::put('/admin/orders/{order}/status', [Admin\OrderController::class, 'updateStatus'])->name('admin.orders.updateStatus');
-//     Route::put('/admin/orders/{order}', [Admin\OrderController::class, 'update'])->name('admin.orders.update');
-//     Route::delete('/admin/orders/{order}', [Admin\OrderController::class, 'destroy'])->name('admin.orders.destroy');
+
 // });
 
 require __DIR__.'/auth.php';
+require __DIR__.'/admin.php';

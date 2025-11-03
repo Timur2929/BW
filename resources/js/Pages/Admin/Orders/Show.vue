@@ -1,4 +1,5 @@
 <template>
+<AdminLayout>
   <Head :title="`Заказ ${order.order_number}`" />
 
   <div class="min-h-screen bg-gray-50">
@@ -53,6 +54,7 @@
       </div>
     </div>
   </div>
+   </AdminLayout>
 </template>
 
 <script setup>

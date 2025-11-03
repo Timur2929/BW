@@ -1,4 +1,5 @@
 <template>
+<AdminLayout>
   <Head title="Управление заказами" />
 
   <div class="min-h-screen bg-gray-50">
@@ -68,7 +69,7 @@
               <tbody>
                 <tr v-for="order in orders.data" :key="order.id" class="table-row">
                   <td class="table-cell">
-                    <span class="font-mono text-sm font-semibold">{{ order.order_number }}</span>
+                    <span class="font-mono text-sm text-gray-600 font-semibold">{{ order.order_number }}</span>
                   </td>
                   <td class="table-cell">
                     <div class="customer-info">
@@ -76,7 +77,7 @@
                       <span class="customer-email">{{ order.email }}</span>
                     </div>
                   </td>
-                  <td class="table-cell">
+                  <td class="table-cell text-gray-600">
                     {{ formatDate(order.created_at) }}
                   </td>
                   <td class="table-cell">
@@ -156,8 +157,8 @@
           </button>
         </div>
         <div class="modal-content">
-          <p class="mb-4">Заказ: <strong>{{ selectedOrder?.order_number }}</strong></p>
-          <select v-model="newStatus" class="status-select">
+          <p class="mb-4 text-gray-600">Заказ: <strong>{{ selectedOrder?.order_number }}</strong></p>
+          <select v-model="newStatus" class="status-select text-gray-800">
             <option value="pending">Ожидает подтверждения</option>
             <option value="processing">В обработке</option>
             <option value="shipped">Отправлен</option>
@@ -172,6 +173,7 @@
       </div>
     </div>
   </div>
+  </AdminLayout>
 </template>
 
 <script setup>
