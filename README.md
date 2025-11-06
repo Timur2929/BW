@@ -1,13 +1,13 @@
 ## Установка
 
-1. Обновить PHP зависимости:
+1. Обновить PHP зависимости (Composer):
 ```bash
 composer update
 ```
 
 2. Установите зависимости:
 ```bash
-npm install
+npm i
 ```
 
 3. Скопируйте файл конфигурации:
@@ -23,16 +23,16 @@ php artisan key:generate
 5. Настройте подключение к базе данных в файле .env:
 ```
 DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
+DB_HOST=db.web.edu
 DB_PORT=3306
-DB_DATABASE=your_database_name
-DB_USERNAME=your_username
+DB_DATABASE=22051_shop
+DB_USERNAME=22051
 DB_PASSWORD=your_password
 ```
 
-6. Выполните миграции и заполните базу данных начальными данными:
+6. Обновите миграции и заполните базу данных начальными данными:
 ```bash
-php artisan migrate --seed
+php artisan migrate:fresh --seed
 ```
 
 7. Создайте символическую ссылку для хранения файлов:
@@ -61,3 +61,6 @@ npm install @heroicons/vue
 - Гость (неавторизованный пользователь)
 - Пользователь
 - Администратор
+
+## Галлерея Информационной системы
+

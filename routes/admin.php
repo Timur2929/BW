@@ -3,7 +3,7 @@
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
-
+// Маршруты для управления заказами пользователей в системе
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::prefix('orders')->name('orders.')->group(function () {
         Route::get('/', [OrderController::class, 'index'])->name('index');
@@ -14,7 +14,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('/{order}/cancel', [OrderController::class, 'cancel'])->name('cancel');
         Route::delete('/{order}', [OrderController::class, 'destroy'])->name('destroy');
     });
-
+// Маршруты для управления пользователями системы
      Route::prefix('users')->name('users.')->group(function () {
         Route::get('/', [UserController::class, 'index'])->name('index');
         Route::get('/create', [UserController::class, 'create'])->name('create');
@@ -24,4 +24,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::put('/{user}', [UserController::class, 'update'])->name('update');
         Route::delete('/{user}', [UserController::class, 'destroy'])->name('destroy');
     });
+// Маршруты для управления категориями в системе
+    
+
+
+
+
 });
