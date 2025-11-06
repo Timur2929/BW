@@ -47,15 +47,15 @@
     <span v-if="route().current('admin.orders.*')" class="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-lg border border-purple-500/30"></span>
 </Link>
 
-                                <Link
-                                    :href="route('admin.articles.index')"
-                                    class="relative group inline-flex items-center px-3 py-2 text-sm font-medium transition-all duration-300 text-gray-400 hover:text-white"
-                                >
-                                    <svg class="w-5 h-5 mr-2 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/>
-                                    </svg>
-                                    Пользователи
-                                </Link>
+                               <Link
+    :href="route('admin.users.index')"
+    class="relative group inline-flex items-center px-3 py-2 text-sm font-medium transition-all duration-300 text-gray-400 hover:text-white"
+>
+    <svg class="w-5 h-5 mr-2 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/>
+    </svg>
+    Пользователи
+</Link>
 
                                 <Link
                                     :href="route('admin.articles.index')"

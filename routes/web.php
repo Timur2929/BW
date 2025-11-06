@@ -3,6 +3,7 @@
 
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\HomeController;
@@ -121,6 +122,17 @@ Route::middleware(['auth', \App\Http\Middleware\AdminMiddleware::class])->group(
     Route::put('/admin/orders/{order}/status', [Admin\OrderController::class, 'updateStatus'])->name('admin.orders.updateStatus');
     Route::put('/admin/orders/{order}', [Admin\OrderController::class, 'update'])->name('admin.orders.update');
     Route::delete('/admin/orders/{order}', [Admin\OrderController::class, 'destroy'])->name('admin.orders.destroy');
+
+    // Маршруты для пользователей
+  Route::prefix('users')->name('users.')->group(function () {
+        Route::get('/', [UserController::class, 'index'])->name('index');
+        Route::get('/create', [UserController::class, 'create'])->name('create');
+        Route::post('/', [UserController::class, 'store'])->name('store');
+        Route::get('/{user}', [UserController::class, 'show'])->name('show');
+        Route::get('/{user}/edit', [UserController::class, 'edit'])->name('edit');
+      Route::put('/{user}', [UserController::class, 'update'])->name('update'); // PUT для обновления
+        Route::delete('/{user}', [UserController::class, 'destroy'])->name('destroy');
+    });
 
     // Маршруты для модерации рецептов
     Route::post('/admin/recipes/{recipe}/approve', [\App\Http\Controllers\Admin\RecipeController::class, 'approve'])->name('admin.recipes.approve');
