@@ -2,27 +2,27 @@
     <AdminLayout>
         <div class="py-6">
             <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-                <h1 class="text-2xl font-bold text-white mb-6">Редактирование категории</h1>
+                <h1 class="text-2xl font-bold text-white mb-6">Создание категории</h1>
 
                 <form @submit.prevent="submit" class="space-y-6">
-                    <!-- Текущее изображение -->
+                    <!-- Изображение -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-300 mb-2">Текущее изображение</label>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Изображение категории</label>
                         <div class="flex items-center space-x-4">
-                            <img 
-                                v-if="category.image" 
-                                :src="category.image" 
-                                :alt="form.name"
-                                class="w-32 h-32 rounded-lg object-cover"
-                            >
-                            <div v-else class="w-32 h-32 bg-gray-600 rounded-lg flex items-center justify-center">
-                                <PhotoIcon class="w-12 h-12 text-gray-400" />
+                            <div v-if="form.image" class="relative">
+                                <img :src="imagePreview" class="w-32 h-32 rounded-lg object-cover">
+                                <button 
+                                    type="button"
+                                    @click="removeImage"
+                                    class="absolute -top-2 -right-2 bg-red-600 text-white rounded-full p-1 hover:bg-red-700"
+                                >
+                                    <XMarkIcon class="w-4 h-4" />
+                                </button>
                             </div>
-                            
-                            <div class="border-2 border-dashed border-gray-600 rounded-lg p-4 text-center">
-                                <PhotoIcon class="mx-auto w-8 h-8 text-gray-400" />
+                            <div v-else class="border-2 border-dashed border-gray-600 rounded-lg p-4 text-center">
+                                <PhotoIcon class="mx-auto w-12 h-12 text-gray-400" />
                                 <label class="cursor-pointer">
-                                    <span class="text-blue-400 hover:text-blue-300 text-sm">Заменить изображение</span>
+                                    <span class="text-blue-400 hover:text-blue-300">Выберите изображение</span>
                                     <input 
                                         type="file" 
                                         @input="form.image = $event.target.files[0]" 
@@ -80,7 +80,7 @@
                             :disabled="form.processing"
                             class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition-colors disabled:opacity-50"
                         >
-                            Обновить категорию
+                            Создать категорию
                         </button>
                     </div>
                 </form>
@@ -92,23 +92,28 @@
 <script setup>
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { Link, useForm } from '@inertiajs/vue3';
-import { PhotoIcon } from '@heroicons/vue/24/outline';
-
-const props = defineProps({
-    category: {
-        type: Object,
-        required: true
-    }
-});
+import { ref, computed } from 'vue';
+import { PhotoIcon, XMarkIcon } from '@heroicons/vue/24/outline';
 
 const form = useForm({
-    name: props.category.name,
-    description: props.category.description,
+    name: '',
+    description: '',
     image: null
 });
 
+const imagePreview = computed(() => {
+    if (form.image && typeof form.image === 'object') {
+        return URL.createObjectURL(form.image);
+    }
+    return null;
+});
+
+const removeImage = () => {
+    form.image = null;
+};
+
 const submit = () => {
-    form.post(route('admin.categories.update', props.category.id), {
+    form.post(route('admin.categories.store'), {
         forceFormData: true,
     });
 };
