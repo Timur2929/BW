@@ -4,8 +4,8 @@
             <!-- Заголовок и кнопка -->
             <div class="sm:flex sm:items-center sm:justify-between mb-8">
                 <div class="mb-4 sm:mb-0">
-                    <h1 class="text-2xl font-bold leading-7 text-gray-900 sm:truncate">Управление пользователями</h1>
-                    <p class="mt-1 text-sm text-gray-500">Всего пользователей: {{ users.total }}</p>
+                    <h1 class="text-2xl font-bold leading-7 text-white-900 sm:truncate">Управление пользователями</h1>
+                    <p class="mt-1 text-sm text-white-500">Всего пользователей: {{ users.total }}</p>
                 </div>
                 <Link 
                     :href="route('admin.users.create')"

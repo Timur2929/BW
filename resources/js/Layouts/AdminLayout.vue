@@ -9,7 +9,7 @@
                             <!-- Логотип -->
                             <div class="flex-shrink-0 flex items-center">
                                 <Link :href="route('admin.articles.create')" class="text-xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-                                    Админ-панель
+                                    KAMENIKA ADMIN
                                 </Link>
                             </div>
 
