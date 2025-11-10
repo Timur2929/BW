@@ -183,7 +183,7 @@ class RecipeSeeder extends Seeder
                 'quantity' => 5,
                 'ingredients' => [
                     ['name' => 'Родонит', 'amount' => '15', 'unit' => 'шт'],
-                    ['name' => 'Цеопчка из Золото', 'amount' => '5', 'unit' => 'шт']
+                    ['name' => 'Цепочка из Золота', 'amount' => '5', 'unit' => 'шт']
                 ],
                 'steps' => [
                     ['order' => 1, 'description' => 'Фирменная упаковка в подарок'],
@@ -204,7 +204,7 @@ class RecipeSeeder extends Seeder
                     ['name' => 'Байкальский нефрит', 'amount' => '5', 'unit' => 'шт'],
                     ['name' => 'Гематит', 'amount' => '8', 'unit' => 'шт'],
                     ['name' => 'Покрытие - родий', 'amount' => '1', 'unit' => 'шт'],
-                    ['name' => 'Цеопчка из Золото', 'amount' => '5', 'unit' => 'шт']
+                    ['name' => 'Цепочка из Золота', 'amount' => '5', 'unit' => 'шт']
                 ],
                 'steps' => [
                     ['order' => 1, 'description' => 'Фирменная упаковка в подарок'],

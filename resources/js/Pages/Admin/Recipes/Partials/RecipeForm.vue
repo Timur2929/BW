@@ -16,7 +16,7 @@
                                     type="text"
                                     name="name"
                                     id="name"
-                                    class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                                    class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md text-gray-900"
                                     :class="{ 'border-red-300': form.errors.name }"
                                 />
                                 <p v-if="form.errors.name" class="mt-2 text-sm text-red-600">
@@ -34,7 +34,7 @@
                                     v-model="form.category_id"
                                     id="category_id"
                                     name="category_id"
-                                    class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                                    class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
                                     :class="{ 'border-red-300': form.errors.category_id }"
                                 >
                                     <option value="">Выберите категорию</option>
@@ -58,7 +58,7 @@
                                     type="text"
                                     name="cooking_time"
                                     id="cooking_time"
-                                    class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                                    class="shadow-sm focus:ring-indigo-500 text-gray-900 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
                                     :class="{ 'border-red-300': form.errors.cooking_time }"
                                     placeholder="например: 2 дня"
                                 />
@@ -79,7 +79,7 @@
                                     step="0.01"
                                     name="price"
                                     id="price"
-                                    class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                                    class="shadow-sm focus:ring-indigo-500 text-gray-900 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
                                     :class="{ 'border-red-300': form.errors.price }"
                                 />
                                 <p v-if="form.errors.price" class="mt-2 text-sm text-red-600">
@@ -98,7 +98,7 @@
                                     type="number"
                                     name="quantity"
                                     id="quantity"
-                                    class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                                    class="shadow-sm focus:ring-indigo-500 text-gray-900 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
                                     :class="{ 'border-red-300': form.errors.quantity }"
                                 />
                                 <p v-if="form.errors.quantity" class="mt-2 text-sm text-red-600">
@@ -117,7 +117,7 @@
                                     id="description"
                                     name="description"
                                     rows="3"
-                                    class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md"
+                                    class="shadow-sm focus:ring-indigo-500 text-gray-900 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md"
                                     :class="{ 'border-red-300': form.errors.description }"
                                 />
                                 <p v-if="form.errors.description" class="mt-2 text-sm text-red-600">
@@ -167,7 +167,7 @@
                         <button 
                             type="button" 
                             @click="addIngredient"
-                            class="inline-flex items-center px-3 py-1 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition ease-in-out duration-150"
+                            class="inline-flex items-center px-3 py-1 border border-transparent text-sm  leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition ease-in-out duration-150"
                         >
                             Добавить материал
                         </button>
@@ -179,7 +179,7 @@
                                     v-model="ingredient.name"
                                     type="text"
                                     placeholder="Название материала"
-                                    class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                                    class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-gray-900 block w-full sm:text-sm border-gray-300 rounded-md"
                                 />
                             </div>
                             <div class="w-24">
@@ -187,7 +187,7 @@
                                     v-model="ingredient.amount"
                                     type="text"
                                     placeholder="Количество"
-                                    class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                                    class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-gray-900 block w-full sm:text-sm border-gray-300 rounded-md"
                                 />
                             </div>
                             <div class="w-24">
@@ -195,7 +195,7 @@
                                     v-model="ingredient.unit"
                                     type="text"
                                     placeholder="Ед. изм."
-                                    class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                                    class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-gray-900 block w-full sm:text-sm border-gray-300 rounded-md"
                                 />
                             </div>
                             <button 
@@ -230,7 +230,7 @@
                                 <input
                                     v-model="step.order"
                                     type="number"
-                                    class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                                    class="shadow-sm focus:ring-indigo-500 text-gray-900 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
                                     min="1"
                                 />
                             </div>
@@ -239,7 +239,7 @@
                                     v-model="step.description"
                                     rows="2"
                                     placeholder="Описание особенности"
-                                    class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                                    class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-gray-900 block w-full sm:text-sm border-gray-300 rounded-md"
                                 />
                             </div>
                             <button 
