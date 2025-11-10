@@ -33,22 +33,22 @@
                     <!-- Основная информация -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                         <div>
-                            <h2 class="text-lg font-semibold mb-2">Информация о украшении</h2>
-                            <div class="space-y-2">
-                                <p><span class="font-medium">Автор:</span> {{ recipe.user.name }}</p>
-                                <p><span class="font-medium">Категория:</span> {{ recipe.category?.name || 'Не указана' }}</p>
-                                <p><span class="font-medium">Время приготовления:</span> {{ recipe.cooking_time }} мин.</p>
-                                <p><span class="font-medium">Сложность:</span> {{ recipe.difficulty }}</p>
-                                <p><span class="font-medium">Порции:</span> {{ recipe.servings }}</p>
+                            <h2 class="text-lg font-semibold mb-2 text-gray-800">Информация о украшении</h2>
+                            <div class="space-y-2 text-gray-800">
+                                <p><span class="font-medium text-gray-800">Автор:</span> {{ recipe.user.name }}</p>
+                                <p><span class="font-medium text-gray-800">Категория:</span> {{ recipe.category?.name || 'Не указана' }}</p>
+                                <p><span class="font-medium text-gray-800">Время приготовления:</span> {{ recipe.cooking_time }} мин.</p>
+                                <p><span class="font-medium text-gray-800">Сложность:</span> {{ recipe.difficulty }}</p>
+                                <p><span class="font-medium text-gray-800">Порции:</span> {{ recipe.servings }}</p>
                             </div>
                         </div>
                         <div>
-                            <h2 class="text-lg font-semibold mb-2">Статистика</h2>
-                            <div class="space-y-2">
-                                <p><span class="font-medium">Просмотры:</span> {{ recipe.views }}</p>
-                                <p><span class="font-medium">Рейтинг:</span> {{ recipe.rating }}</p>
-                                <p><span class="font-medium">Дата создания:</span> {{ formatDate(recipe.created_at) }}</p>
-                                <p><span class="font-medium">Дата обновления:</span> {{ formatDate(recipe.updated_at) }}</p>
+                            <h2 class="text-lg font-semibold mb-2 text-gray-800">Статистика</h2>
+                            <div class="space-y-2 text-gray-800">
+                                <p><span class="font-medium text-gray-800">Просмотры:</span> {{ recipe.views }}</p>
+                                <p><span class="font-medium text-gray-800">Рейтинг:</span> {{ recipe.rating }}</p>
+                                <p><span class="font-medium text-gray-800">Дата создания:</span> {{ formatDate(recipe.created_at) }}</p>
+                                <!-- <p><span class="font-medium">Дата обновления:</span> {{ formatDate(recipe.updated_at) }}</p> -->
                             </div>
                         </div>
                     </div>
@@ -64,14 +64,14 @@
 
                     <!-- Описание -->
                     <div class="mb-6">
-                        <h2 class="text-lg font-semibold mb-2">Описание</h2>
+                        <h2 class="text-lg font-semibold mb-2 text-gray-800">Описание</h2>
                         <p class="text-gray-700">{{ recipe.description }}</p>
                     </div>
 
                     <!-- Ингредиенты -->
                     <div class="mb-6">
-                        <h2 class="text-lg font-semibold mb-2">Ингредиенты</h2>
-                        <ul class="list-disc list-inside space-y-1">
+                        <h2 class="text-lg font-semibold mb-2 text-gray-800">Ингредиенты</h2>
+                        <ul class="list-disc list-inside space-y-1 text-gray-800">
                             <li v-for="ingredient in recipe.ingredients" :key="ingredient.id">
                                 {{ ingredient.name }} - {{ ingredient.amount }} {{ ingredient.unit }}
                             </li>
@@ -80,7 +80,7 @@
 
                     <!-- Шаги приготовления -->
                     <div class="mb-6">
-                        <h2 class="text-lg font-semibold mb-2">Шаги приготовления</h2>
+                        <h2 class="text-lg font-semibold mb-2 text-gray-800">Шаги приготовления</h2>
                         <ol class="list-decimal list-inside space-y-4">
                             <li v-for="step in recipe.steps" :key="step.id" class="text-gray-700">
                                 {{ step.description }}

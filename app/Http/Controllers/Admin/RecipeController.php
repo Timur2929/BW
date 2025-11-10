@@ -6,53 +6,77 @@ use App\Http\Controllers\Controller;
 use App\Models\Recipe;
 use App\Models\Category;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
 use Illuminate\Support\Facades\Storage;
+use Inertia\Inertia;
 
 class RecipeController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
-    {
-        $query = Recipe::with(['user', 'category'])
-            ->latest();
+   public function index(Request $request)
+{
+    $query = Recipe::with(['user', 'category', 'ingredients'])
+        ->latest();
 
-        // Фильтрация по статусу
-        if ($request->has('status') && $request->status !== 'all') {
-            $query->where('status', $request->status);
-        }
-
-        // Поиск
-        if ($request->has('search')) {
-            $search = $request->search;
-            $query->where(function($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('description', 'like', "%{$search}%")
-                  ->orWhereHas('user', function($q) use ($search) {
-                      $q->where('full_name', 'like', "%{$search}%");
-                  });
-            });
-        }
-
-        $recipes = $query->paginate(15);
-
-        return Inertia::render('Admin/Recipes/Index', [
-            'recipes' => $recipes,
-            'filters' => [
-                'search' => $request->search,
-                'status' => $request->status
-            ],
-            'statuses' => [
-                'all' => 'Все',
-                Recipe::STATUS_PENDING => 'На модерации',
-                Recipe::STATUS_APPROVED => 'Одобрено',
-                Recipe::STATUS_REJECTED => 'Отклонено',
-                Recipe::STATUS_REVISION => 'На доработке'
-            ]
-        ]);
+    // Поиск
+    if ($request->has('search') && $request->search) {
+        $search = $request->search;
+        $query->where(function($q) use ($search) {
+            $q->where('name', 'like', "%{$search}%")
+              ->orWhere('description', 'like', "%{$search}%");
+        });
     }
+
+    // Фильтр по статусу
+    if ($request->has('status') && $request->status !== 'all') {
+        $query->where('status', $request->status);
+    }
+
+    $recipes = $query->paginate(12);
+
+    // Преобразуем данные рецептов для фронтенда
+    $recipes->getCollection()->transform(function ($recipe) {
+        return [
+            'id' => $recipe->id,
+            'name' => $recipe->name,
+            'description' => $recipe->description,
+            'cooking_time' => $recipe->cooking_time,
+            'image' => $recipe->image
+                ? (str_starts_with($recipe->image, '/')
+                    ? asset($recipe->image)
+                    : Storage::url($recipe->image))
+                : asset('/images/placeholder.png'),
+            'price' => $recipe->price,
+            'quantity' => $recipe->quantity,
+            'status' => $recipe->status,
+            'rating' => $recipe->rating,
+            'views' => $recipe->views,
+            'created_at' => $recipe->created_at,
+            'user' => [
+                'id' => $recipe->user->id,
+                'full_name' => $recipe->user->full_name,
+                'avatar' => $recipe->user->avatar
+                    ? (str_starts_with($recipe->user->avatar, '/')
+                        ? asset($recipe->user->avatar)
+                        : Storage::url($recipe->user->avatar))
+                    : asset('/images/profile/default-avatar.png'),
+            ],
+            'category' => $recipe->category ? [
+                'id' => $recipe->category->id,
+                'name' => $recipe->category->name
+            ] : null
+        ];
+    });
+
+    return Inertia::render('Admin/Recipes/Index', [
+        'recipes' => $recipes,
+        'filters' => [
+            'search' => $request->search,
+            'status' => $request->status
+        ]
+    ]);
+}
 
     /**
      * Show the form for creating a new resource.
@@ -76,8 +100,6 @@ class RecipeController extends Controller
             'description' => 'required|string',
             'category_id' => 'required|exists:categories,id',
             'cooking_time' => 'required|string',
-            'servings' => 'nullable|integer|min:1',
-            'difficulty' => 'nullable|in:easy,medium,hard',
             'price' => 'required|numeric|min:0',
             'quantity' => 'required|integer|min:0',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -88,24 +110,21 @@ class RecipeController extends Controller
             'steps' => 'required|array|min:1',
             'steps.*.description' => 'required|string',
             'steps.*.order' => 'required|integer|min:1',
-            'step_images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
         try {
             \DB::beginTransaction();
 
-            // Создаем рецепт
+            // Создаем украшение
             $recipe = new Recipe();
             $recipe->name = $validated['name'];
             $recipe->description = $validated['description'];
             $recipe->category_id = $validated['category_id'];
             $recipe->cooking_time = $validated['cooking_time'];
-            $recipe->servings = $validated['servings'] ?? 1;
-            $recipe->difficulty = $validated['difficulty'] ?? 'medium';
             $recipe->price = $validated['price'];
             $recipe->quantity = $validated['quantity'];
             $recipe->user_id = auth()->id();
-            $recipe->status = Recipe::STATUS_APPROVED; // Админ создает сразу одобренный
+            $recipe->status = Recipe::STATUS_APPROVED; // Админ сразу публикует
             $recipe->approved_at = now();
             
             // Сохраняем основное изображение
@@ -126,31 +145,37 @@ class RecipeController extends Controller
             }
 
             // Сохраняем шаги
-            foreach ($validated['steps'] as $index => $stepData) {
-                $step = $recipe->steps()->create([
+            foreach ($validated['steps'] as $stepData) {
+                $recipe->steps()->create([
                     'description' => $stepData['description'],
                     'order' => $stepData['order']
                 ]);
-
-                if ($request->hasFile("step_images.{$index}")) {
-                    $path = $request->file("step_images.{$index}")->store('recipe-steps', 'public');
-                    $step->image = $path;
-                    $step->save();
-                }
             }
 
             \DB::commit();
 
             return redirect()->route('admin.recipes.index')
-                ->with('success', 'Рецепт успешно создан!');
+                ->with('success', 'Украшение успешно создано!');
 
         } catch (\Exception $e) {
             \DB::rollBack();
             
             return redirect()->back()
                 ->withInput()
-                ->with('error', 'Ошибка при создании рецепта: ' . $e->getMessage());
+                ->with('error', 'Произошла ошибка при создании украшения: ' . $e->getMessage());
         }
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(Recipe $recipe)
+    {
+        $recipe->load(['user', 'category', 'ingredients', 'steps']);
+
+        return Inertia::render('Admin/Recipes/Show', [
+            'recipe' => $this->formatRecipeData($recipe)
+        ]);
     }
 
     /**
@@ -158,19 +183,12 @@ class RecipeController extends Controller
      */
     public function edit(Recipe $recipe)
     {
-        $recipe->load(['ingredients', 'steps', 'category']);
-        
+        $recipe->load(['ingredients', 'steps']);
         $categories = Category::all();
-        
+
         return Inertia::render('Admin/Recipes/Edit', [
-            'recipe' => $recipe,
-            'categories' => $categories,
-            'statuses' => [
-                Recipe::STATUS_PENDING => 'На модерации',
-                Recipe::STATUS_APPROVED => 'Одобрено',
-                Recipe::STATUS_REJECTED => 'Отклонено',
-                Recipe::STATUS_REVISION => 'На доработке'
-            ]
+            'recipe' => $this->formatRecipeData($recipe),
+            'categories' => $categories
         ]);
     }
 
@@ -184,11 +202,8 @@ class RecipeController extends Controller
             'description' => 'required|string',
             'category_id' => 'required|exists:categories,id',
             'cooking_time' => 'required|string',
-            'servings' => 'nullable|integer|min:1',
-            'difficulty' => 'nullable|in:easy,medium,hard',
             'price' => 'required|numeric|min:0',
             'quantity' => 'required|integer|min:0',
-            'status' => 'required|in:pending,approved,rejected,revision',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'ingredients' => 'required|array|min:1',
             'ingredients.*.name' => 'required|string|max:255',
@@ -197,71 +212,56 @@ class RecipeController extends Controller
             'steps' => 'required|array|min:1',
             'steps.*.description' => 'required|string',
             'steps.*.order' => 'required|integer|min:1',
-            'step_images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
         try {
             \DB::beginTransaction();
 
-            // Обновляем рецепт
-            $recipe->name = $validated['name'];
-            $recipe->description = $validated['description'];
-            $recipe->category_id = $validated['category_id'];
-            $recipe->cooking_time = $validated['cooking_time'];
-            $recipe->servings = $validated['servings'] ?? 1;
-            $recipe->difficulty = $validated['difficulty'] ?? 'medium';
-            $recipe->price = $validated['price'];
-            $recipe->quantity = $validated['quantity'];
-            $recipe->status = $validated['status'];
+            // Обновляем украшение
+            $recipe->update([
+                'name' => $validated['name'],
+                'description' => $validated['description'],
+                'category_id' => $validated['category_id'],
+                'cooking_time' => $validated['cooking_time'],
+                'price' => $validated['price'],
+                'quantity' => $validated['quantity'],
+            ]);
             
-            // Обновляем изображение если есть новое
+            // Обновляем изображение, если есть
             if ($request->hasFile('image')) {
                 // Удаляем старое изображение
                 if ($recipe->image) {
                     Storage::disk('public')->delete($recipe->image);
                 }
+                
                 $path = $request->file('image')->store('recipe-images', 'public');
                 $recipe->image = $path;
+                $recipe->save();
             }
-            
-            $recipe->save();
 
-            // Обновляем ингредиенты (удаляем старые, создаем новые)
+            // Обновляем ингредиенты
             $recipe->ingredients()->delete();
             foreach ($validated['ingredients'] as $ingredientData) {
-                $recipe->ingredients()->create([
-                    'name' => $ingredientData['name'],
-                    'amount' => $ingredientData['amount'],
-                    'unit' => $ingredientData['unit']
-                ]);
+                $recipe->ingredients()->create($ingredientData);
             }
 
             // Обновляем шаги
             $recipe->steps()->delete();
-            foreach ($validated['steps'] as $index => $stepData) {
-                $step = $recipe->steps()->create([
-                    'description' => $stepData['description'],
-                    'order' => $stepData['order']
-                ]);
-
-                if ($request->hasFile("step_images.{$index}")) {
-                    $path = $request->file("step_images.{$index}")->store('recipe-steps', 'public');
-                    $step->image = $path;
-                    $step->save();
-                }
+            foreach ($validated['steps'] as $stepData) {
+                $recipe->steps()->create($stepData);
             }
 
             \DB::commit();
 
             return redirect()->route('admin.recipes.index')
-                ->with('success', 'Рецепт успешно обновлен!');
+                ->with('success', 'Украшение успешно обновлено!');
 
         } catch (\Exception $e) {
             \DB::rollBack();
             
             return redirect()->back()
                 ->withInput()
-                ->with('error', 'Ошибка при обновлении рецепта: ' . $e->getMessage());
+                ->with('error', 'Произошла ошибка при обновлении украшения: ' . $e->getMessage());
         }
     }
 
@@ -271,26 +271,24 @@ class RecipeController extends Controller
     public function destroy(Recipe $recipe)
     {
         try {
-            // Удаляем связанные изображения
+            // Удаляем связанные данные
+            $recipe->ingredients()->delete();
+            $recipe->steps()->delete();
+            
+            // Удаляем изображения
             if ($recipe->image) {
                 Storage::disk('public')->delete($recipe->image);
             }
             
-            // Удаляем изображения шагов
-            foreach ($recipe->steps as $step) {
-                if ($step->image) {
-                    Storage::disk('public')->delete($step->image);
-                }
-            }
-            
+            // Удаляем само украшение
             $recipe->delete();
 
             return redirect()->route('admin.recipes.index')
-                ->with('success', 'Рецепт успешно удален!');
+                ->with('success', 'Украшение успешно удалено!');
 
         } catch (\Exception $e) {
             return redirect()->back()
-                ->with('error', 'Ошибка при удалении рецепта: ' . $e->getMessage());
+                ->with('error', 'Произошла ошибка при удалении украшения: ' . $e->getMessage());
         }
     }
 
@@ -310,50 +308,84 @@ class RecipeController extends Controller
     }
 
     /**
-     * Approve recipe
+     * Update recipe status
      */
-    public function approve(Recipe $recipe)
+    public function updateStatus(Request $request, Recipe $recipe)
     {
-        $recipe->update([
-            'status' => Recipe::STATUS_APPROVED,
-            'approved_at' => now()
+        $validated = $request->validate([
+            'status' => 'required|in:pending,approved,rejected,revision',
+            'rejection_reason' => 'required_if:status,rejected|string|min:10',
+            'revision_comment' => 'required_if:status,revision|string|min:10',
         ]);
 
-        return redirect()->back()->with('success', 'Рецепт одобрен');
+        try {
+            $updateData = ['status' => $validated['status']];
+
+            if ($validated['status'] === Recipe::STATUS_APPROVED) {
+                $updateData['approved_at'] = now();
+                $updateData['rejection_reason'] = null;
+                $updateData['revision_comment'] = null;
+            } elseif ($validated['status'] === Recipe::STATUS_REJECTED) {
+                $updateData['rejected_at'] = now();
+                $updateData['rejection_reason'] = $validated['rejection_reason'];
+                $updateData['revision_comment'] = null;
+            } elseif ($validated['status'] === Recipe::STATUS_REVISION) {
+                $updateData['revision_comment'] = $validated['revision_comment'];
+                $updateData['rejection_reason'] = null;
+            }
+
+            $recipe->update($updateData);
+
+            return redirect()->back()
+                ->with('success', 'Статус украшения успешно обновлен!');
+
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Произошла ошибка при обновлении статуса: ' . $e->getMessage());
+        }
     }
 
     /**
-     * Reject recipe
+     * Format recipe data for frontend
      */
-    public function reject(Recipe $recipe, Request $request)
+    private function formatRecipeData(Recipe $recipe)
     {
-        $validated = $request->validate([
-            'rejection_reason' => 'required|min:10'
-        ]);
-
-        $recipe->update([
-            'status' => Recipe::STATUS_REJECTED,
-            'rejected_at' => now(),
-            'rejection_reason' => $validated['rejection_reason']
-        ]);
-
-        return redirect()->back()->with('success', 'Рецепт отклонен');
-    }
-
-    /**
-     * Send recipe to revision
-     */
-    public function sendToRevision(Recipe $recipe, Request $request)
-    {
-        $validated = $request->validate([
-            'revision_comment' => 'required|min:10'
-        ]);
-
-        $recipe->update([
-            'status' => Recipe::STATUS_REVISION,
-            'revision_comment' => $validated['revision_comment']
-        ]);
-
-        return redirect()->back()->with('success', 'Рецепт отправлен на доработку');
+        return [
+            'id' => $recipe->id,
+            'name' => $recipe->name,
+            'description' => $recipe->description,
+            'cooking_time' => $recipe->cooking_time,
+            'image' => $recipe->image ? Storage::url($recipe->image) : null,
+            'price' => $recipe->price,
+            'quantity' => $recipe->quantity,
+            'status' => $recipe->status,
+            'rating' => $recipe->rating,
+            'views' => $recipe->views,
+            'created_at' => $recipe->created_at,
+            'user' => [
+                'id' => $recipe->user->id,
+                'full_name' => $recipe->user->full_name,
+            ],
+            'category' => $recipe->category ? [
+                'id' => $recipe->category->id,
+                'name' => $recipe->category->name
+            ] : null,
+            'ingredients' => $recipe->ingredients->map(function ($ingredient) {
+                return [
+                    'id' => $ingredient->id,
+                    'name' => $ingredient->name,
+                    'amount' => $ingredient->amount,
+                    'unit' => $ingredient->unit
+                ];
+            }),
+            'steps' => $recipe->steps->map(function ($step) {
+                return [
+                    'id' => $step->id,
+                    'description' => $step->description,
+                    'order' => $step->order,
+                    'image' => $step->image ? Storage::url($step->image) : null
+                ];
+            })->sortBy('order')->values(),
+        ];
     }
 }

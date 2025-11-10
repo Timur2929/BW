@@ -134,6 +134,15 @@ Route::middleware(['auth', \App\Http\Middleware\AdminMiddleware::class])->group(
         Route::delete('/{user}', [UserController::class, 'destroy'])->name('destroy');
     });
 
+     Route::prefix('my-recipes')->name('recipes.')->group(function () {
+        Route::get('/create', [RecipeController::class, 'create'])->name('create');
+        Route::post('/', [RecipeController::class, 'store'])->name('store');
+        Route::get('/{recipe}/edit', [RecipeController::class, 'edit'])->name('edit');
+        Route::put('/{recipe}', [RecipeController::class, 'update'])->name('update');
+        Route::get('/{recipe}/resubmit', [RecipeController::class, 'resubmit'])->name('resubmit');
+        Route::delete('/{recipe}', [RecipeController::class, 'destroy'])->name('destroy');
+    });
+
     // Маршруты для модерации рецептов
     Route::post('/admin/recipes/{recipe}/approve', [\App\Http\Controllers\Admin\RecipeController::class, 'approve'])->name('admin.recipes.approve');
     Route::post('/admin/recipes/{recipe}/reject', [\App\Http\Controllers\Admin\RecipeController::class, 'reject'])->name('admin.recipes.reject');

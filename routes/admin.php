@@ -37,6 +37,22 @@ Route::prefix('admin')->name('admin.')->group(function () {
 });
 
 // Маршруты для управления украшениями в системе
+// Маршруты для управления украшениями
+    Route::prefix('recipes')->name('recipes.')->group(function () {
+        Route::get('/', [RecipeController::class, 'index'])->name('index');
+        Route::get('/create', [RecipeController::class, 'create'])->name('create');
+        Route::post('/', [RecipeController::class, 'store'])->name('store');
+        Route::get('/{recipe}', [RecipeController::class, 'show'])->name('show');
+        Route::get('/{recipe}/edit', [RecipeController::class, 'edit'])->name('edit');
+        Route::put('/{recipe}', [RecipeController::class, 'update'])->name('update');
+        Route::delete('/{recipe}', [RecipeController::class, 'destroy'])->name('destroy');
+        Route::get('/pending', [RecipeController::class, 'pending'])->name('pending');
+        Route::put('/{recipe}/status', [RecipeController::class, 'updateStatus'])->name('updateStatus');
+        Route::get('/{recipe}/review', [RecipeController::class, 'review'])->name('review');
+        Route::post('/{recipe}/approve', [RecipeController::class, 'approve'])->name('approve');
+        Route::post('/{recipe}/reject', [RecipeController::class, 'reject'])->name('reject');
+        Route::post('/{recipe}/send-to-revision', [RecipeController::class, 'sendToRevision'])->name('sendToRevision');
+    });
 
 
 
