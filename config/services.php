@@ -28,6 +28,11 @@ return [
         'key' => env('RESEND_KEY'),
     ],
 
+    'telegram' => [
+    'bot_token' => env('TELEGRAM_BOT_TOKEN'),
+    'bot_username' => env('TELEGRAM_BOT_USERNAME'),
+],
+
     'slack' => [
         'notifications' => [
             'bot_user_oauth_token' => env('SLACK_BOT_USER_OAUTH_TOKEN'),

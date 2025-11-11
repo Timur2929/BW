@@ -18,6 +18,15 @@ const submit = () => {
     }
   })
 }
+
+// Функция для входа через Telegram
+const loginWithTelegram = () => {
+  // Вариант 1: Открыть OAuth авторизацию
+  window.location.href = '/auth/telegram/redirect';
+  
+  // Или вариант 2: Использовать Telegram Widget
+  // initTelegramAuth();
+}
 </script>
 
 <template>
@@ -27,6 +36,20 @@ const submit = () => {
         <div class="auth-header">
           <h2>Добро пожаловать</h2>
           <p>Введите свои данные для входа</p>
+        </div>
+
+<!-- Кнопка входа через Telegram -->
+        <div class="social-auth">
+          <button @click="loginWithTelegram" type="button" class="telegram-button">
+            <svg class="telegram-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.191c-.175.761-.835 2.667-1.65 5.515-.683 2.324-1.344 4.61-1.544 5.078-.323.758-.715 1.011-1.175 1.037-.99.056-1.745-.654-2.705-1.283-1.506-.985-2.359-1.599-3.819-2.562-.538-.359-.812-.586-.781-.924.018-.212.274-.429.805-.653 3.422-1.491 5.708-2.465 6.861-2.922 3.335-1.332 4.027-1.561 4.481-1.565.102 0 .326.023.472.139.126.1.161.234.177.328.016.094.034.306.018.472z"/>
+            </svg>
+            Войти через Telegram
+          </button>
+        </div>
+
+        <div class="divider">
+          <span>или</span>
         </div>
 
         <form @submit.prevent="submit" class="auth-form">
@@ -279,6 +302,75 @@ const submit = () => {
   .form-input:focus + label,
   .form-input:not(:placeholder-shown) + label {
     left: 1.25rem;
+  }
+}
+.social-auth {
+  padding: 0 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.telegram-button {
+  width: 100%;
+  padding: 0.875rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  background-color: #0088cc;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.telegram-button:hover {
+  background-color: #0077b3;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 136, 204, 0.3);
+}
+
+.telegram-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.divider {
+  position: relative;
+  text-align: center;
+  margin: 1.5rem 2rem;
+  color: #64748b;
+  font-size: 0.875rem;
+}
+
+.divider::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background-color: #e2e8f0;
+  z-index: 1;
+}
+
+.divider span {
+  background-color: white;
+  padding: 0 1rem;
+  position: relative;
+  z-index: 2;
+}
+
+/* Адаптивность */
+@media (max-width: 480px) {
+  .social-auth {
+    padding: 0 1.5rem;
+  }
+  
+  .divider {
+    margin: 1.5rem 1.5rem;
   }
 }
 </style>

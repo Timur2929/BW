@@ -1,6 +1,6 @@
 <?php
 
-
+use App\Http\Controllers\TelegramAuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\UserController;
@@ -27,6 +27,9 @@ Route::get('/', function () {
         'phpVersion' => PHP_VERSION,
     ]);
 });
+
+Route::get('/auth/telegram/redirect', [TelegramAuthController::class, 'redirect'])->name('telegram.redirect');
+Route::get('/auth/telegram/callback', [TelegramAuthController::class, 'callback'])->name('telegram.callback');
 
 Route::middleware('auth')->group(function () {
     // Профиль пользователя
